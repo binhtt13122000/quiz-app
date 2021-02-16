@@ -12,7 +12,6 @@ import java.io.File;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import java.util.List;
-import java.util.concurrent.ScheduledExecutorService;
 import javax.servlet.ServletContext;
 import org.apache.log4j.PropertyConfigurator;
 
@@ -39,6 +38,5 @@ public class StartServerListener implements ServletContextListener {
 
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

@@ -104,7 +104,6 @@ public class QuizDAO implements Serializable {
             connection.setAutoCommit(false);
             int checkAnswer = 0;
             int index = 0;
-            System.out.println(answers.length);
             for (String answer: answers) {
                 preparedStatement = connection.prepareStatement(sqlAnswer);
                 preparedStatement.setInt(1, Integer.parseInt(answer));

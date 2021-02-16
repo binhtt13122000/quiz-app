@@ -5,7 +5,6 @@
  */
 package binhtt.controllers;
 
-import binhtt.constants.Controllers;
 import binhtt.constants.Pages;
 import binhtt.daos.QuizDAO;
 import binhtt.dtos.QuizDTO;
@@ -13,7 +12,6 @@ import binhtt.dtos.SubjectDTO;
 import binhtt.dtos.UserDTO;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;

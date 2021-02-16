@@ -12,7 +12,6 @@ import binhtt.dtos.QuestionDTO;
 import binhtt.dtos.SubjectDTO;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -47,9 +46,7 @@ public class SubmitController extends HttpServlet {
             SubjectDTO subjectDTO = (SubjectDTO) session.getAttribute("SELECTED_SUBJECT");
             List<QuestionDTO> questionDTOS = (List<QuestionDTO>) session.getAttribute("LIST_QUESTION");
             String answer = request.getParameter("answer");
-            System.out.println(answer);
             String[] answers = answer.split("");
-            System.out.println(answers.length);
             QuizDAO quizDAO = new QuizDAO();
             boolean check = quizDAO.submit(quizId, answers, questionDTOS);
             if (check) {

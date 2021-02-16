@@ -8,7 +8,6 @@ package binhtt.controllers;
 import binhtt.daos.UserDAO;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -42,9 +41,9 @@ public class RegisterController extends HttpServlet {
             UserDAO userDAO = new UserDAO();
             boolean check = userDAO.register(email, name, password);
             if(check){
-                System.out.println("Success");
+                request.setAttribute("INFO", "ok");
             } else {
-                System.out.println("Failure!");
+                request.setAttribute("INFO", "fail");                
             }
         } catch (Exception e){
             LOGGER.info("Exception at RegisterController: " + e.getMessage());
