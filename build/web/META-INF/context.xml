@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context antiJARLocking="true" path="/Lab2Quiz">
+    <Resource name="DBConnection"
+              auth="Container"
+              type="javax.sql.DataSource"
+              username="sa"
+              password="thanhbinhvllamnhe69"
+              driverClassName="com.microsoft.sqlserver.jdbc.SQLServerDriver"
+              url="jdbc:sqlserver://localhost;databaseName=Lab2"
+              maxActive="8"
+              maxIdle="4"
+    />
+</Context>

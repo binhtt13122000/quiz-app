@@ -1,0 +1,106 @@
+body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.login__content {
+    padding: 15% 6% 0 6%;
+    font-family: 'Arsenal', sans-serif;
+    height: max-content;
+}
+
+.login__title {
+    font-weight: 800;
+    font-size: 55px;
+    color: #16720a;
+    margin: 0;
+}
+
+.login__description {
+    margin: 10px 0;
+    color: #3d3a3a;
+    padding-top: 1rem;
+    padding-bottom: 2rem;
+    font-size: 2rem;
+}
+
+.login__subtitle {
+    font-size: 1em;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    color: #3d3a3a;
+}
+
+.btn--google {
+    width: 192px;
+    height: 42px;
+    background-color: #4285f4;
+    border-radius: 2px;
+    cursor: pointer;
+    box-shadow: 0 3px 4px 0 rgba(0,0,0, 0.25);
+}
+
+.btn--google:hover {
+    box-shadow: 0 0 6px #4285f4;
+}
+
+.btn-google__icon {
+    position: absolute;
+    margin-top: 1px;
+    margin-left: 1px;
+    width: 40px;
+    height: 40px;
+    border-radius: 2px;
+    background-color: white;
+}
+
+.google-icon {
+    position: absolute;
+    margin-top: 11px;
+    margin-left: 11px;
+    width: 18px;
+    height: 18px;
+}
+
+.btn-google__text {
+    font-family: Roboto,arial,sans-serif;
+    float: right;
+    margin: 11px 11px 0 0;
+    color: white;
+    font-size: 14px;
+    letter-spacing: 0.2px;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.btn-google__text:hover {
+    text-decoration: none;
+    color: white;
+}
+
+.form {
+    width: 60%;
+}
+
+@media screen and (max-width: 576px){
+    .login__title {
+        font-size: 40px;
+    }
+
+    .login__description {
+        font-size: 1.2rem;
+    }
+
+    .form {
+        width: 100%;
+    }
+
+    .login__content {
+        padding: 6% 6% 0 6%;
+    }
+
+    .login__description {
+        padding-bottom: 1rem;
+    }
+}
