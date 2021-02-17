@@ -36,6 +36,10 @@
                     <div class="form-group">
                         <label>Password</label>
                         <input name="password" required type="password" class="form-control" value="${param.password}"/>
+                        <c:if test="${requestScope.ERROR != null}">
+                            <p style="color: red">${requestScope.ERROR}</p>
+                            ${requestScope.remove("ERROR")}
+                        </c:if>
                     </div>
                     <div class="d-flex justify-content-start">
                         <input type="submit" class="btn btn-success" value="Sign in"/>
