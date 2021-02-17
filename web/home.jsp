@@ -16,7 +16,7 @@
           integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
     <link href='https://fonts.googleapis.com/css?family=Anaheim' rel='stylesheet'>
     <link href='https://fonts.googleapis.com/css?family=Arsenal' rel='stylesheet'>
-    <title>JSP Page</title>
+    <title>FPTU Quiz</title>
     <style>
         .pagination-item {
             color: #2dcc70;

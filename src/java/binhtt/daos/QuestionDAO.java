@@ -151,14 +151,13 @@ public class QuestionDAO implements Serializable {
     public String generateId(String subjectId) throws Exception {
         String newId;
         try {
-            String sql = "select id from TblQuestion where subId = ? order by id desc";
+            String sql = "select count(id) as count from TblQuestion where subId = ?";
             connection = MyConnection.getConnection();
             preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, subjectId);
             resultSet = preparedStatement.executeQuery();
             if(resultSet.next()){
-                String id = resultSet.getString("id");
-                int index = Integer.parseInt(id.split("_")[2]) + 1;
+                int index = resultSet.getInt("count") + 1;
                 newId = subjectId + "_Question_" + index;
             } else {
                 newId = subjectId + "_Question_1";

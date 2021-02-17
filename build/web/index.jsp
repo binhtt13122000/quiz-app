@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="css/login.css"/>
     <link href='https://fonts.googleapis.com/css?family=Anaheim' rel='stylesheet'>
     <link href='https://fonts.googleapis.com/css?family=Arsenal' rel='stylesheet'>
-    <title>JSP Page</title>
+    <title>FPTU Quiz</title>
 </head>
 <body>
 <div class="container-fluid">

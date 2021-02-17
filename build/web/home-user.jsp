@@ -16,7 +16,7 @@
     <link href='https://fonts.googleapis.com/css?family=Anaheim' rel='stylesheet'>
     <link href='https://fonts.googleapis.com/css?family=Arsenal' rel='stylesheet'>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
-    <title>JSP Page</title>
+    <title>FPTU Quiz</title>
     <style>
         .main {
             min-height: 80vh;

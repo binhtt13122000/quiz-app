@@ -38,6 +38,7 @@ public class RegisterController extends HttpServlet {
             String email = request.getParameter("emailTxt");
             String password = request.getParameter("passwordTxt");
             String name = request.getParameter("nameTxt");
+            String confirm = request.getParameter("");
             UserDAO userDAO = new UserDAO();
             boolean check = userDAO.register(email, name, password);
             if(check){
