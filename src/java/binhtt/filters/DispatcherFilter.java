@@ -5,6 +5,9 @@
  */
 package binhtt.filters;
 
+import binhtt.constants.Pages;
+import binhtt.dtos.UserDTO;
+
 import java.io.IOException;
 import java.io.PrintStream;
 import java.io.PrintWriter;
@@ -17,6 +20,7 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -101,17 +105,23 @@ public class DispatcherFilter implements Filter {
             throws IOException, ServletException {
 
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
-        String url = "index.jsp";
+        String url = Pages.LOGIN;
         try {
-            String uri = httpServletRequest.getRequestURI();
-            String resource = uri.substring(uri.lastIndexOf("/") + 1);
-            if(!resource.trim().isEmpty()){
-                if(resource.endsWith(".html") || resource.endsWith(".jsp")){
-                    url = resource;
-                } else if(resource.endsWith(".css") || resource.endsWith(".js") || resource.endsWith(".png")){
-                    url = null;
-                } else {
-                    url = resource.substring(0, 1).toUpperCase(Locale.ROOT) + resource.substring(1) + "Controller";
+            HttpSession session = httpServletRequest.getSession();
+            UserDTO userDTO = (UserDTO) session.getAttribute("USER");
+            if(userDTO == null){
+                url = Pages.LOGIN;
+            } else {
+                String uri = httpServletRequest.getRequestURI();
+                String resource = uri.substring(uri.lastIndexOf("/") + 1);
+                if(!resource.trim().isEmpty()){
+                    if(resource.endsWith(".html") || resource.endsWith(".jsp")){
+                        url = resource;
+                    } else if(resource.endsWith(".css") || resource.endsWith(".js") || resource.endsWith(".png")){
+                        url = null;
+                    } else {
+                        url = resource.substring(0, 1).toUpperCase(Locale.ROOT) + resource.substring(1) + "Controller";
+                    }
                 }
             }
             if(url != null){
