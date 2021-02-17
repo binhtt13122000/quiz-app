@@ -121,28 +121,8 @@
                 </div>
             </div>
         </c:forEach>
-<%--        <nav class="mt-5" aria-label="Page navigation questions">--%>
-<%--            <ul class="pagination justify-content-center">--%>
-<%--                <li class="page-item">--%>
-<%--                    <a class="page-link" style="color: #2dcc70" href="#" aria-label="Previous">--%>
-<%--                        <span aria-hidden="true">&laquo;</span>--%>
-<%--                    </a>--%>
-<%--                </li>--%>
-<%--                <li class="page-item"><a class="page-link pagination-item page-active" href="#">1</a></li>--%>
-<%--                <li class="page-item"><a class="page-link pagination-item" href="#">2</a></li>--%>
-<%--                <li class="page-item"><a class="page-link pagination-item" href="#">3</a></li>--%>
-<%--                <li class="page-item">--%>
-<%--                    <a class="page-link" style="color: #2dcc70" href="#" aria-label="Next">--%>
-<%--                        <span aria-hidden="true">&raquo;</span>--%>
-<%--                    </a>--%>
-<%--                </li>--%>
-<%--            </ul>--%>
-<%--        </nav>--%>
     </div>
 </main>
-<footer>
-    d
-</footer>
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
         integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
         crossorigin="anonymous"></script>
@@ -175,9 +155,12 @@
         location.href = 'submit?answer=' + str;
     }
 
+    window.addEventListener('beforeunload', function (e) {
+        e.preventDefault();
+        e.returnValue = '';
+    });
+
     function loadTime(){
-        <%--let time = ${requestScope.SELECTED_SUBJECT.timeToTakeQuiz * 60};--%>
-        <%--let minute = ${requestScope.SELECTED_SUBJECT.timeToTakeQuiz};--%>
         let time = ${requestScope.SELECTED_SUBJECT.timeToTakeQuiz * 60};
         let minute = 0;
         let second = 0;
