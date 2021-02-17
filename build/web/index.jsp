@@ -31,11 +31,11 @@
                 <form class="form mb-3" method="post" action="login">
                     <div class="form-group">
                         <label>Email Address</label>
-                        <input name="email" type="text" class="form-control" value="${param.email}"/>
+                        <input name="email" required type="text" class="form-control" value="${param.email}"/>
                     </div>
                     <div class="form-group">
                         <label>Password</label>
-                        <input name="password" type="password" class="form-control" value="${param.password}"/>
+                        <input name="password" required type="password" class="form-control" value="${param.password}"/>
                     </div>
                     <div class="d-flex justify-content-start">
                         <input type="submit" class="btn btn-success" value="Sign in"/>
@@ -56,6 +56,10 @@
                 <div class="mb-3">
                     <p>Haven't had account before? <span><a href="#" data-toggle="modal" data-target="#registerModal">Register</a></span>
                     </p>
+                    <c:if test="${requestScope.REGISTER_STATUS != null}">
+                        <p style="color: ${requestScope.REGISTER_STATUS.equals("register failed!") ? "red": "green"}">${requestScope.REGISTER_STATUS}</p>
+                        ${requestScope.remove("REGISTER_STATUS")}
+                    </c:if>
                 </div>
             </div>
         </div>
@@ -69,27 +73,29 @@
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <form method="post" action="register">
+                    <form method="post" action="register" id="formRegister">
                         <div class="modal-body">
                             <div class="form-group">
                                 <label>Email</label>
-                                <input class="form-control" name="emailTxt" value="${param.emailTxt}"/>
+                                <input required type="email" class="form-control" name="emailTxt" value="${param.emailTxt}"/>
                             </div>
                             <div class="form-group">
                                 <label>Your name</label>
-                                <input class="form-control" name="nameTxt" value="${param.nameTxt}"/>
+                                <input required class="form-control" name="nameTxt" value="${param.nameTxt}"/>
                             </div>
                             <div class="form-group">
                                 <label>Password</label>
-                                <input type="password" class="form-control" name="passwordTxt"
+                                <input id="passwordTxt" required type="password" class="form-control" name="passwordTxt"
                                        value="${param.passwordTxt}"/>
                             </div>
                             <div class="form-group">
                                 <label>Confirm Password</label>
-                                <input type="password" class="form-control" name="confirmTxt"
+                                <input id="confirmTxt" required type="password" class="form-control" name="confirmTxt"
                                        value="${param.confirmTxt}"/>
+                                <span id='message'></span>
                             </div>
                         </div>
+                        <div id="messageRegister"></div>
                         <div class="modal-footer">
                             <input type="submit" class="btn btn-success" value="Register"/>
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -107,6 +113,20 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns"
         crossorigin="anonymous"></script>
+<script>
+    $('#passwordTxt, #confirmTxt').on('keyup', function () {
+        if ($('#passwordTxt').val() == $('#confirmTxt').val()) {
+            $('#message').html('Matching').css('color', 'green');
+        } else
+            $('#message').html('Not Matching').css('color', 'red');
+    });
+
+    $("#formRegister").submit(function(e){
+        if ($('#passwordTxt').val() != $('#confirmTxt').val()){
+            e.preventDefault();
+        }
+    });
+</script>
 </body>
 </html>
 

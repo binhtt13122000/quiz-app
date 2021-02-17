@@ -5,6 +5,7 @@
  */
 package binhtt.controllers;
 
+import binhtt.constants.Pages;
 import binhtt.daos.UserDAO;
 
 import java.io.IOException;
@@ -34,22 +35,29 @@ public class RegisterController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        String url = Pages.ERROR_PAGE;
         try {
             String email = request.getParameter("emailTxt");
             String password = request.getParameter("passwordTxt");
             String name = request.getParameter("nameTxt");
-            String confirm = request.getParameter("");
-            UserDAO userDAO = new UserDAO();
-            boolean check = userDAO.register(email, name, password);
-            if(check){
-                request.setAttribute("INFO", "ok");
+            String confirm = request.getParameter("confirmTxt");
+            if(!confirm.equals(password)){
+                request.setAttribute("ERROR", "Password and Confirm is not same!");
             } else {
-                request.setAttribute("INFO", "fail");                
+                url = Pages.LOGIN;
+                UserDAO userDAO = new UserDAO();
+                boolean check = userDAO.register(email, name, password);
+                if(check){
+                    request.setAttribute("REGISTER_STATUS", "register successfully!");
+                } else {
+                    request.setAttribute("REGISTER_STATUS", "register failed!");
+                }
             }
         } catch (Exception e){
+            request.setAttribute("REGISTER_STATUS", "register failed!");
             LOGGER.info("Exception at RegisterController: " + e.getMessage());
         } finally {
-            request.getRequestDispatcher("index.jsp").forward(request, response);
+            request.getRequestDispatcher(url).forward(request, response);
         }
     }
 
