@@ -1,7 +1,7 @@
-drop database Lab2
-create database Lab2
+drop database Assignment2_NguyenDucHuy
+create database Assignment2_NguyenDucHuy
 go
-use Lab2
+use Assignment2_NguyenDucHuy
 go
 
 create table TblRole (
@@ -57,9 +57,9 @@ create table TblAnswer (
 
 insert TblRole(id, roleName) values (1, 'STUDENT'), (2, 'ADMIN')
 insert TblSubject(id, name, status, timeToTakeQuiz, totalOfQuestionsPerQuiz, pointPerQuestion)
-values ('PRJ321', 'Java Web', 1, 5, 40, 2.5),
-		('PRJ311', 'Java Desktop', 1, 5, 50, 2),
-		('PRN292', 'C#.NET', 1, 5, 20, 5)
+values ('PRJ321', 'Java Web', 1, 80, 50, 2),
+		('PRJ311', 'Java Desktop', 60, 20, 40, 2.5),
+		('PRN292', 'C#.NET', 1, 60, 40, 2.5)
 
 insert TblQuestion(id, question_content, answerA, answerB, answerC, answerD, correctAnswer, status, subId)
 values ('PRJ321_Question_1', 'Class HttpServlet defines the methods _____ and _______ to response to get and post request from a client.', 'DoGet, DoPost', 'doGet, doPost', 'doGET, doPOST', 'Get, Post', 2, 1, 'PRJ321'),
@@ -87,6 +87,31 @@ values ('PRJ321_Question_1', 'Class HttpServlet defines the methods _____ and __
 ('PRJ321_Question_23', ' Which HTTP method gets invoked when a user clicks on a link? Select the one correct answer.', 'GET method', 'POST method', 'HEAD method', 'PUT method', 1, 1, 'PRJ321'),
 ('PRJ321_Question_24', ' Which HTTP method gets invoked when a user clicks on a link? Select the one correct answer.', 'GET method', 'POST method', 'HEAD method', 'PUT method', 1, 1, 'PRJ321'),
 ('PRJ321_Question_25', ' Which HTTP method gets invoked when a user clicks on a link? Select the one correct answer.', 'GET method', 'POST method', 'HEAD method', 'PUT method', 1, 1, 'PRJ321'),
+('PRJ321_Question_26', 'Class HttpServlet defines the methods _____ and _______ to response to get and post request from a client.', 'DoGet, DoPost', 'doGet, doPost', 'doGET, doPOST', 'Get, Post', 2, 1, 'PRJ321'),
+('PRJ321_Question_27', 'Classes HttpServlet and GenericServlet implement the ___ interface.', 'Servlet', 'Http', 'HttpServletRequest', 'HttpServletResponse', 1, 1, 'PRJ321'),
+('PRJ321_Question_28', 'Name the default value of the scope attribute of <jsp:useBean>', 'page', 'session', 'application', 'request', 1, 1, 'PRJ321'),
+('PRJ321_Question_29', 'Which jsp tag can be used to set bean property?', 'jsp:useBean', 'jsp:property', 'jsp:setProperty', 'jsp:useBean.setProperty', 4, 1, 'PRJ321'),
+('PRJ321_Question_30', 'Which element defined within the taglib element of taglib descriptor file is required? Select one correct answer.', 'Tag', 'Description', 'Validator', 'Name', 1, 1, 'PRJ321'),
+('PRJ321_Question_31', 'HttpServletRequest.getSession() method returns a_____object.', 'HttpServletSession.', 'HttpResponseSession.', 'HttpRequestSession.', 'HttpSession.', 4, 1, 'PRJ321'),
+('PRJ321_Question_32', 'Which is NOT true about stateless session beans?', 'They are used to represent data stored in a RDBMS', 'They are used to implement business logic', 'They are an Enterprises Beans', 'They are CANNOT hold client state', 1, 1, 'PRJ321'),
+('PRJ321_Question_33', 'Which Java technology provides a unified interface to multiple naming and directory services?', 'JNI', 'JDBC', 'JavaMail', 'JNDI', 4, 1, 'PRJ321'),
+('PRJ321_Question_34', 'A(n)_enables a web application to obtain a Connection to a database.', 'DataSource', 'Netbean', 'Eclipse', 'Web server', 1, 1, 'PRJ321'),
+('PRJ321_Question_35', 'Which is NOT provided by the EJB tier in a multitier JEE (J2EE) application?', 'XML Parsing', 'Concurrency control', 'Transaction management', 'Security', 4, 1, 'PRJ321'),
+('PRJ321_Question_36', 'Which type of JEE (or J2EE) component is used to store business data persistently?', 'Stateful session beans', 'Java Server Pages', 'Stateles session beans', 'Entity Bean', 4, 1, 'PRJ321'),
+('PRJ321_Question_37', 'Which is true about JDBC?', ' The JDBC API is an extension of the ODBC API', 'All JDBC drivers are pure Java.', 'JDBC is used to connect to MOM (Message-Oriented Middleware Product)', 'The JDBC API is included in J2SE', 4, 1, 'PRJ321'),
+('PRJ321_Question_38', 'Data Integrity is the biggest issue for your web application. What will you do?', 'Use HTTPS instead of HTTP.', 'Use LDAP to store user credentials.', 'Use HTTP digest authentication.', 'Use form-based authentication.', 4, 1, 'PRJ321'),
+('PRJ321_Question_39', 'Which is NOT the main type of JSP constructs that you embed in a page?', 'directives', 'scripting elements', 'HTML code', 'actions', 4, 1, 'PRJ321'),
+('PRJ321_Question_40', 'Servlet Container calls the init method on a servlet instance_', 'For each request to the servlet', 'For each request to the servlet that causes a new thread to be created', 'Only once in the life time of the servlet instance', 'If the request is from the user whose session has expired.', 3, 1, 'PRJ321'),
+('PRJ321_Question_41', 'Which of the following is NOT a valid attribute for a useBean tag?', 'className', 'beanName', 'scope', '1', 1, 1, 'PRJ321'),
+('PRJ321_Question_42', 'Which statement is true about EJB 3.0 containers?', 'The Java 2D API is guaranteed to be available for session beans', 'Java Telephony API is guaranteed to be available for session and message beans', 'javax.naming.initialContextis guaranteed to provide a JNDI name space', 'All', 3, 1, 'PRJ321'),
+('PRJ321_Question_43', 'JDBC supports ______ and ______ models.', ' Three-tier and four-tier', 'Two-tier and three-tier', 'None of the other choices', 'Single-tier and two-tier', 2, 1, 'PRJ321'),
+('PRJ321_Question_44', 'The ______ class is the primary class that has the driver information.', 'None of the other choices', 'Driver', 'DriverManager', 'ODBCDriver', 3, 1, 'PRJ321'),
+('PRJ321_Question_45', ' Which HTTP method gets invoked when a user clicks on a link? Select the one correct answer.', 'GET method', 'POST method', 'HEAD method', 'PUT method', 1, 1, 'PRJ321'),
+('PRJ321_Question_46', ' Which HTTP method gets invoked when a user clicks on a link? Select the one correct answer.', 'GET method', 'POST method', 'HEAD method', 'PUT method', 1, 1, 'PRJ321'),
+('PRJ321_Question_47', ' Which HTTP method gets invoked when a user clicks on a link? Select the one correct answer.', 'GET method', 'POST method', 'HEAD method', 'PUT method', 1, 1, 'PRJ321'),
+('PRJ321_Question_48', ' Which HTTP method gets invoked when a user clicks on a link? Select the one correct answer.', 'GET method', 'POST method', 'HEAD method', 'PUT method', 1, 1, 'PRJ321'),
+('PRJ321_Question_49', ' Which HTTP method gets invoked when a user clicks on a link? Select the one correct answer.', 'GET method', 'POST method', 'HEAD method', 'PUT method', 1, 1, 'PRJ321'),
+('PRJ321_Question_50', ' Which HTTP method gets invoked when a user clicks on a link? Select the one correct answer.', 'GET method', 'POST method', 'HEAD method', 'PUT method', 1, 1, 'PRJ321'),
 ('PRJ311_Question_1', 'Class HttpServlet defines the methods _____ and _______ to response to get and post request from a client.', 'DoGet, DoPost', 'doGet, doPost', 'doGET, doPOST', 'Get, Post', 2, 1, 'PRJ311'),
 ('PRJ311_Question_2', 'Classes HttpServlet and GenericServlet implement the ___ interface.', 'Servlet', 'Http', 'HttpServletRequest', 'HttpServletResponse', 1, 1, 'PRJ311'),
 ('PRJ311_Question_3', 'Name the default value of the scope attribute of <jsp:useBean>', 'page', 'session', 'application', 'request', 1, 1, 'PRJ311'),
@@ -112,6 +137,21 @@ values ('PRJ321_Question_1', 'Class HttpServlet defines the methods _____ and __
 ('PRJ311_Question_23', ' Which HTTP method gets invoked when a user clicks on a link? Select the one correct answer.', 'GET method', 'POST method', 'HEAD method', 'PUT method', 1, 1, 'PRJ311'),
 ('PRJ311_Question_24', ' Which HTTP method gets invoked when a user clicks on a link? Select the one correct answer.', 'GET method', 'POST method', 'HEAD method', 'PUT method', 1, 1, 'PRJ311'),
 ('PRJ311_Question_25', ' Which HTTP method gets invoked when a user clicks on a link? Select the one correct answer.', 'GET method', 'POST method', 'HEAD method', 'PUT method', 1, 1, 'PRJ311'),
+('PRJ311_Question_26', 'Class HttpServlet defines the methods _____ and _______ to response to get and post request from a client.', 'DoGet, DoPost', 'doGet, doPost', 'doGET, doPOST', 'Get, Post', 2, 1, 'PRJ311'),
+('PRJ311_Question_27', 'Classes HttpServlet and GenericServlet implement the ___ interface.', 'Servlet', 'Http', 'HttpServletRequest', 'HttpServletResponse', 1, 1, 'PRJ311'),
+('PRJ311_Question_28', 'Name the default value of the scope attribute of <jsp:useBean>', 'page', 'session', 'application', 'request', 1, 1, 'PRJ311'),
+('PRJ311_Question_29', 'Which jsp tag can be used to set bean property?', 'jsp:useBean', 'jsp:property', 'jsp:setProperty', 'jsp:useBean.setProperty', 4, 1, 'PRJ311'),
+('PRJ311_Question_30', 'Which element defined within the taglib element of taglib descriptor file is required? Select one correct answer.', 'Tag', 'Description', 'Validator', 'Name', 1, 1, 'PRJ311'),
+('PRJ311_Question_31', 'HttpServletRequest.getSession() method returns a_____object.', 'HttpServletSession.', 'HttpResponseSession.', 'HttpRequestSession.', 'HttpSession.', 4, 1, 'PRJ311'),
+('PRJ311_Question_32', 'Which is NOT true about stateless session beans?', 'They are used to represent data stored in a RDBMS', 'They are used to implement business logic', 'They are an Enterprises Beans', 'They are CANNOT hold client state', 1, 1, 'PRJ311'),
+('PRJ311_Question_33', 'Which Java technology provides a unified interface to multiple naming and directory services?', 'JNI', 'JDBC', 'JavaMail', 'JNDI', 4, 1, 'PRJ311'),
+('PRJ311_Question_34', 'A(n)_enables a web application to obtain a Connection to a database.', 'DataSource', 'Netbean', 'Eclipse', 'Web server', 1, 1, 'PRJ311'),
+('PRJ311_Question_35', 'Which is NOT provided by the EJB tier in a multitier JEE (J2EE) application?', 'XML Parsing', 'Concurrency control', 'Transaction management', 'Security', 4, 1, 'PRJ311'),
+('PRJ311_Question_36', 'Which type of JEE (or J2EE) component is used to store business data persistently?', 'Stateful session beans', 'Java Server Pages', 'Stateles session beans', 'Entity Bean', 4, 1, 'PRJ311'),
+('PRJ311_Question_37', 'Which is true about JDBC?', ' The JDBC API is an extension of the ODBC API', 'All JDBC drivers are pure Java.', 'JDBC is used to connect to MOM (Message-Oriented Middleware Product)', 'The JDBC API is included in J2SE', 4, 1, 'PRJ311'),
+('PRJ311_Question_38', 'Data Integrity is the biggest issue for your web application. What will you do?', 'Use HTTPS instead of HTTP.', 'Use LDAP to store user credentials.', 'Use HTTP digest authentication.', 'Use form-based authentication.', 4, 1, 'PRJ311'),
+('PRJ311_Question_39', 'Which is NOT the main type of JSP constructs that you embed in a page?', 'directives', 'scripting elements', 'HTML code', 'actions', 4, 1, 'PRJ311'),
+('PRJ311_Question_40', 'Servlet Container calls the init method on a servlet instance_', 'For each request to the servlet', 'For each request to the servlet that causes a new thread to be created', 'Only once in the life time of the servlet instance', 'If the request is from the user whose session has expired.', 3, 1, 'PRJ311'),
 ('PRN292_Question_1', 'Class HttpServlet defines the methods _____ and _______ to response to get and post request from a client.', 'DoGet, DoPost', 'doGet, doPost', 'doGET, doPOST', 'Get, Post', 2, 1, 'PRN292'),
 ('PRN292_Question_2', 'Classes HttpServlet and GenericServlet implement the ___ interface.', 'Servlet', 'Http', 'HttpServletRequest', 'HttpServletResponse', 1, 1, 'PRN292'),
 ('PRN292_Question_3', 'Name the default value of the scope attribute of <jsp:useBean>', 'page', 'session', 'application', 'request', 1, 1, 'PRN292'),
@@ -136,4 +176,20 @@ values ('PRJ321_Question_1', 'Class HttpServlet defines the methods _____ and __
 ('PRN292_Question_22', ' Which HTTP method gets invoked when a user clicks on a link? Select the one correct answer.', 'GET method', 'POST method', 'HEAD method', 'PUT method', 1, 1, 'PRN292'),
 ('PRN292_Question_23', ' Which HTTP method gets invoked when a user clicks on a link? Select the one correct answer.', 'GET method', 'POST method', 'HEAD method', 'PUT method', 1, 1, 'PRN292'),
 ('PRN292_Question_24', ' Which HTTP method gets invoked when a user clicks on a link? Select the one correct answer.', 'GET method', 'POST method', 'HEAD method', 'PUT method', 1, 1, 'PRN292'),
-('PRN292_Question_25', ' Which HTTP method gets invoked when a user clicks on a link? Select the one correct answer.', 'GET method', 'POST method', 'HEAD method', 'PUT method', 1, 1, 'PRN292')
+('PRN292_Question_25', ' Which HTTP method gets invoked when a user clicks on a link? Select the one correct answer.', 'GET method', 'POST method', 'HEAD method', 'PUT method', 1, 1, 'PRN292'),
+('PRN292_Question_26', 'Class HttpServlet defines the methods _____ and _______ to response to get and post request from a client.', 'DoGet, DoPost', 'doGet, doPost', 'doGET, doPOST', 'Get, Post', 2, 1, 'PRN292'),
+('PRN292_Question_27', 'Classes HttpServlet and GenericServlet implement the ___ interface.', 'Servlet', 'Http', 'HttpServletRequest', 'HttpServletResponse', 1, 1, 'PRN292'),
+('PRN292_Question_28', 'Name the default value of the scope attribute of <jsp:useBean>', 'page', 'session', 'application', 'request', 1, 1, 'PRN292'),
+('PRN292_Question_29', 'Which jsp tag can be used to set bean property?', 'jsp:useBean', 'jsp:property', 'jsp:setProperty', 'jsp:useBean.setProperty', 4, 1, 'PRN292'),
+('PRN292_Question_30', 'Which element defined within the taglib element of taglib descriptor file is required? Select one correct answer.', 'Tag', 'Description', 'Validator', 'Name', 1, 1, 'PRN292'),
+('PRN292_Question_31', 'HttpServletRequest.getSession() method returns a_____object.', 'HttpServletSession.', 'HttpResponseSession.', 'HttpRequestSession.', 'HttpSession.', 4, 1, 'PRN292'),
+('PRN292_Question_32', 'Which is NOT true about stateless session beans?', 'They are used to represent data stored in a RDBMS', 'They are used to implement business logic', 'They are an Enterprises Beans', 'They are CANNOT hold client state', 1, 1, 'PRN292'),
+('PRN292_Question_33', 'Which Java technology provides a unified interface to multiple naming and directory services?', 'JNI', 'JDBC', 'JavaMail', 'JNDI', 4, 1, 'PRN292'),
+('PRN292_Question_34', 'A(n)_enables a web application to obtain a Connection to a database.', 'DataSource', 'Netbean', 'Eclipse', 'Web server', 1, 1, 'PRN292'),
+('PRN292_Question_35', 'Which is NOT provided by the EJB tier in a multitier JEE (J2EE) application?', 'XML Parsing', 'Concurrency control', 'Transaction management', 'Security', 4, 1, 'PRN292'),
+('PRN292_Question_36', 'Which type of JEE (or J2EE) component is used to store business data persistently?', 'Stateful session beans', 'Java Server Pages', 'Stateles session beans', 'Entity Bean', 4, 1, 'PRN292'),
+('PRN292_Question_37', 'Which is true about JDBC?', ' The JDBC API is an extension of the ODBC API', 'All JDBC drivers are pure Java.', 'JDBC is used to connect to MOM (Message-Oriented Middleware Product)', 'The JDBC API is included in J2SE', 4, 1, 'PRN292'),
+('PRN292_Question_38', 'Data Integrity is the biggest issue for your web application. What will you do?', 'Use HTTPS instead of HTTP.', 'Use LDAP to store user credentials.', 'Use HTTP digest authentication.', 'Use form-based authentication.', 4, 1, 'PRN292'),
+('PRN292_Question_39', 'Which is NOT the main type of JSP constructs that you embed in a page?', 'directives', 'scripting elements', 'HTML code', 'actions', 4, 1, 'PRN292'),
+('PRN292_Question_40', 'Servlet Container calls the init method on a servlet instance_', 'For each request to the servlet', 'For each request to the servlet that causes a new thread to be created', 'Only once in the life time of the servlet instance', 'If the request is from the user whose session has expired.', 3, 1, 'PRN292')
+
