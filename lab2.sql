@@ -57,9 +57,6 @@ create table TblAnswer (
 
 
 insert TblRole(id, roleName) values (1, 'STUDENT'), (2, 'ADMIN')
-
-insert TblUser(email, name, password, status, roleId) values ('binhttse@fpt.edu.vn', 'Thanh Binh', HASHBYTES('SHA2_256', 'thanhbinh'),1, 2)
-
 insert TblSubject(id, name, status, timeToTakeQuiz, totalOfQuestionsPerQuiz, pointPerQuestion)
 values ('PRJ321', 'Java Web', 1, 80, 50, 2),
 		('PRJ311', 'Java Desktop', 60, 20, 40, 2.5),
