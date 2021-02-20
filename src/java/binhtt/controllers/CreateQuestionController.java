@@ -7,6 +7,7 @@ package binhtt.controllers;
 
 import binhtt.constants.Controllers;
 import binhtt.constants.Pages;
+import binhtt.constants.Roles;
 import binhtt.daos.QuestionDAO;
 import binhtt.dtos.QuestionDTO;
 
@@ -16,6 +17,9 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import binhtt.dtos.UserDTO;
 import org.apache.log4j.Logger;
 
 /**
@@ -40,23 +44,32 @@ public class CreateQuestionController extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         String url = Pages.ERROR_PAGE;
         try {
-            String question = request.getParameter("question");
-            String answerA = request.getParameter("answerA");
-            String answerB = request.getParameter("answerB");
-            String answerC = request.getParameter("answerC");
-            String answerD = request.getParameter("answerD");
-            String correctAnswer = request.getParameter("correctAnswer");
-            String subject = request.getParameter("subject");
-            QuestionDAO questionDAO = new QuestionDAO();
-            QuestionDTO questionDTO = new QuestionDTO(questionDAO.generateId(subject), question, answerA, answerB, answerC, answerD, Integer.parseInt(correctAnswer), true, subject);
-            boolean check = questionDAO.create(questionDTO);
-            if (!check) {
-                request.setAttribute("ERROR", "Error");
+            HttpSession session = request.getSession();
+            UserDTO userDTO = (UserDTO) session.getAttribute("USER");
+            if(userDTO.getRole() == Roles.USER){
+                request.setAttribute("ERROR", "Cannot insert!");
+            } else {
+                String question = request.getParameter("question");
+                String answerA = request.getParameter("answerA");
+                String answerB = request.getParameter("answerB");
+                String answerC = request.getParameter("answerC");
+                String answerD = request.getParameter("answerD");
+                String correctAnswer = request.getParameter("correctAnswer");
+                String subject = request.getParameter("subject");
+                QuestionDAO questionDAO = new QuestionDAO();
+                QuestionDTO questionDTO = new QuestionDTO(questionDAO.generateId(subject), question, answerA, answerB, answerC, answerD, Integer.parseInt(correctAnswer), true, subject);
+                boolean check = questionDAO.create(questionDTO);
+                if (!check) {
+                    request.setAttribute("ERROR", "Error");
+                } else {
+                    url = Controllers.LOAD_QUESTION_CONTROLLER + "?page=1";
+                }
             }
         } catch (Exception e) {
+            request.setAttribute("ERROR", e.getMessage());
             LOGGER.info("Exception at CreateQuizController: " + e.getMessage());
         } finally {
-            request.getRequestDispatcher(Controllers.LOAD_QUESTION_CONTROLLER + "?page=1").forward(request, response);
+            request.getRequestDispatcher(url).forward(request, response);
         }
     }
 

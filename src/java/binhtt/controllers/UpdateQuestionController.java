@@ -6,6 +6,8 @@
 package binhtt.controllers;
 
 import binhtt.constants.Controllers;
+import binhtt.constants.Pages;
+import binhtt.constants.Roles;
 import binhtt.daos.QuestionDAO;
 import binhtt.dtos.QuestionDTO;
 
@@ -15,6 +17,9 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import binhtt.dtos.UserDTO;
 import org.apache.log4j.Logger;
 
 /**
@@ -38,25 +43,35 @@ public class UpdateQuestionController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        String url = Pages.ERROR_PAGE;
         try {
-            String id = request.getParameter("id");
-            String question = request.getParameter("updateQuestion");
-            String answerA = request.getParameter("updateAnswerA");
-            String answerB = request.getParameter("updateAnswerB");
-            String answerC = request.getParameter("updateAnswerC");
-            String answerD = request.getParameter("updateAnswerD");
-            String correctAnswer = request.getParameter("updateCorrectAnswer");
-            String subject = request.getParameter("updateSubject");
-            QuestionDTO questionDTO = new QuestionDTO(id, question, answerA, answerB, answerC, answerD, Integer.parseInt(correctAnswer), true, subject);
-            QuestionDAO questionDAO = new QuestionDAO();
-            boolean check = questionDAO.update(questionDTO);
-            if (!check) {
-                request.setAttribute("ERROR", "Error");
+            HttpSession session = request.getSession();
+            UserDTO userDTO = (UserDTO) session.getAttribute("USER");
+            if(userDTO.getRole() == Roles.USER){
+                request.setAttribute("ERROR", "User cannot update");
+            } else {
+                String id = request.getParameter("id");
+                String question = request.getParameter("updateQuestion");
+                String answerA = request.getParameter("updateAnswerA");
+                String answerB = request.getParameter("updateAnswerB");
+                String answerC = request.getParameter("updateAnswerC");
+                String answerD = request.getParameter("updateAnswerD");
+                String correctAnswer = request.getParameter("updateCorrectAnswer");
+                String subject = request.getParameter("updateSubject");
+                QuestionDTO questionDTO = new QuestionDTO(id, question, answerA, answerB, answerC, answerD, Integer.parseInt(correctAnswer), true, subject);
+                QuestionDAO questionDAO = new QuestionDAO();
+                boolean check = questionDAO.update(questionDTO);
+                if (!check) {
+                    request.setAttribute("ERROR", "Error");
+                } else {
+                    url = Controllers.LOAD_QUESTION_CONTROLLER + "?page=1";
+                }
             }
         } catch (Exception e) {
+            request.setAttribute("ERROR", e.getMessage());
             LOGGER.info("Exception at UpdateQuestionController: " + e.getMessage());
         } finally {
-            request.getRequestDispatcher(Controllers.LOAD_QUESTION_CONTROLLER + "?page=1").forward(request, response);
+            request.getRequestDispatcher(url).forward(request, response);
         }
     }
 

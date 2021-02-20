@@ -6,6 +6,8 @@
 package binhtt.controllers;
 
 import binhtt.constants.Controllers;
+import binhtt.constants.Pages;
+import binhtt.constants.Roles;
 import binhtt.daos.QuestionDAO;
 
 import java.io.IOException;
@@ -14,6 +16,9 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import binhtt.dtos.UserDTO;
 import org.apache.log4j.Logger;
 
 /**
@@ -37,19 +42,28 @@ public class DeleteQuestionController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        String url = Pages.ERROR_PAGE;
         try {
-            String id = request.getParameter("id");
-            QuestionDAO questionDAO = new QuestionDAO();
-            boolean check = questionDAO.delete(id);
-            if (!check) {
-                request.setAttribute("ERROR", "Delete failed!");
+            HttpSession session = request.getSession();
+            UserDTO userDTO = (UserDTO) session.getAttribute("USER");
+            if(userDTO.getRole() == Roles.USER){
+                request.setAttribute("ERROR", "Cannot delete!");
             } else {
-                request.setAttribute("SUCCESS", "Delete successfully!");
+                String id = request.getParameter("id");
+                QuestionDAO questionDAO = new QuestionDAO();
+                boolean check = questionDAO.delete(id);
+                if (!check) {
+                    request.setAttribute("ERROR", "Delete failed!");
+                } else {
+                    url = Controllers.LOAD_QUESTION_CONTROLLER + "?page=1";
+                    request.setAttribute("SUCCESS", "Delete successfully!");
+                }
             }
         } catch (Exception e) {
+            request.setAttribute("ERROR", e.getMessage());
             LOGGER.info("Exception at DeleteQuestionController: " + e.getMessage());
         } finally {
-            request.getRequestDispatcher(Controllers.LOAD_QUESTION_CONTROLLER + "?page=1").forward(request, response);
+            request.getRequestDispatcher(url).forward(request, response);
         }
     }
 

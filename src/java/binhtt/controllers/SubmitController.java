@@ -7,6 +7,7 @@ package binhtt.controllers;
 
 import binhtt.constants.Controllers;
 import binhtt.constants.Pages;
+import binhtt.constants.Roles;
 import binhtt.daos.QuizDAO;
 import binhtt.dtos.QuestionDTO;
 import binhtt.dtos.SubjectDTO;
@@ -16,6 +17,8 @@ import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
+
+import binhtt.dtos.UserDTO;
 import org.apache.log4j.Logger;
 
 /**
@@ -42,22 +45,28 @@ public class SubmitController extends HttpServlet {
         String url = Pages.ERROR_PAGE;
         try {
             HttpSession session = request.getSession();
-            String quizId = (String) session.getAttribute("QUIZ_ID");
-            SubjectDTO subjectDTO = (SubjectDTO) session.getAttribute("SELECTED_SUBJECT");
-            List<QuestionDTO> questionDTOS = (List<QuestionDTO>) session.getAttribute("LIST_QUESTION");
-            String answer = request.getParameter("answer");
-            String[] answers = answer.split("");
-            QuizDAO quizDAO = new QuizDAO();
-            boolean check = quizDAO.submit(quizId, answers, questionDTOS);
-            if (check) {
-                session.removeAttribute("QUIZ_ID");
-                session.removeAttribute("LIST_QUESTION");
-                session.removeAttribute("SELECTED_SUBJECT");
-                url = Controllers.LOAD_HISTORY_CONTROLLER + "?id=" + subjectDTO.getId();
+            UserDTO userDTO = (UserDTO) session.getAttribute("USER");
+            if(userDTO.getRole() == Roles.ADMIN){
+                request.setAttribute("ERROR", "Admin cannot submit");
             } else {
-                request.setAttribute("ERROR", "failed!");
+                String quizId = (String) session.getAttribute("QUIZ_ID");
+                SubjectDTO subjectDTO = (SubjectDTO) session.getAttribute("SELECTED_SUBJECT");
+                List<QuestionDTO> questionDTOS = (List<QuestionDTO>) session.getAttribute("LIST_QUESTION");
+                String answer = request.getParameter("answer");
+                String[] answers = answer.split("");
+                QuizDAO quizDAO = new QuizDAO();
+                boolean check = quizDAO.submit(quizId, answers, questionDTOS);
+                if (check) {
+                    session.removeAttribute("QUIZ_ID");
+                    session.removeAttribute("LIST_QUESTION");
+                    session.removeAttribute("SELECTED_SUBJECT");
+                    url = Controllers.LOAD_HISTORY_CONTROLLER + "?id=" + subjectDTO.getId();
+                } else {
+                    request.setAttribute("ERROR", "failed!");
+                }
             }
         } catch (Exception e) {
+            request.setAttribute("ERROR", e.getMessage());
             LOGGER.info("Exception at SubmitController: " + e.getMessage());
         } finally {
             request.getRequestDispatcher(url).forward(request, response);

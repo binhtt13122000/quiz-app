@@ -78,6 +78,7 @@ public class LoadQuizController extends HttpServlet {
                 }
             }
         } catch (Exception e){
+            request.setAttribute("ERROR", e.getMessage());
             LOGGER.info("Exception at LoadQuizController: " + e.getMessage());
         }  finally {
             request.getRequestDispatcher(url).forward(request, response);

@@ -6,6 +6,7 @@
 package binhtt.controllers;
 
 import binhtt.constants.Pages;
+import binhtt.constants.Roles;
 import binhtt.daos.QuizDAO;
 import binhtt.dtos.QuizDTO;
 import binhtt.dtos.SubjectDTO;
@@ -18,6 +19,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 import org.apache.log4j.Logger;
 
 /**
@@ -42,38 +45,43 @@ public class LoadHistoryController extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         String url = Pages.ERROR_PAGE;
         try {
-            String id = request.getParameter("id");
-            List<SubjectDTO> subjectDTOS = (List<SubjectDTO>) getServletContext().getAttribute("SUBJECTS");
-            SubjectDTO selectedSubject = null;
-            if(id == null || id.trim().isEmpty()) {
-                selectedSubject = subjectDTOS.get(0);
-                request.setAttribute("SELECTED_SUBJECT", selectedSubject);
-                QuizDAO quizDAO = new QuizDAO();
-                UserDTO userDTO = (UserDTO) request.getSession().getAttribute("USER");
-                List<QuizDTO> quizDTOList = quizDAO.getQuiz(selectedSubject.getId(), userDTO.getEmail());
-                request.setAttribute("HISTORY", quizDTOList);
-                url = Pages.HOME_USER;
+            HttpSession session = request.getSession();
+            UserDTO userDTO = (UserDTO) session.getAttribute("USER");
+            if(userDTO.getRole() == Roles.ADMIN){
+                request.setAttribute("ERROR", "Admin Cannot Load History");
             } else {
-                boolean existed = false;
-                for (SubjectDTO subjectDTO: subjectDTOS) {
-                    if(subjectDTO.getId().equals(id)){
-                        selectedSubject = subjectDTO;
-                        request.setAttribute("SELECTED_SUBJECT", selectedSubject);
-                        existed = true;
-                        break;
-                    }
-                }
-                if(!existed){
-                    request.setAttribute("ERROR", "Id is not available!");
-                } else {
+                String id = request.getParameter("id");
+                List<SubjectDTO> subjectDTOS = (List<SubjectDTO>) getServletContext().getAttribute("SUBJECTS");
+                SubjectDTO selectedSubject = null;
+                if(id == null || id.trim().isEmpty()) {
+                    selectedSubject = subjectDTOS.get(0);
+                    request.setAttribute("SELECTED_SUBJECT", selectedSubject);
                     QuizDAO quizDAO = new QuizDAO();
-                    UserDTO userDTO = (UserDTO) request.getSession().getAttribute("USER");
                     List<QuizDTO> quizDTOList = quizDAO.getQuiz(selectedSubject.getId(), userDTO.getEmail());
                     request.setAttribute("HISTORY", quizDTOList);
                     url = Pages.HOME_USER;
+                } else {
+                    boolean existed = false;
+                    for (SubjectDTO subjectDTO: subjectDTOS) {
+                        if(subjectDTO.getId().equals(id)){
+                            selectedSubject = subjectDTO;
+                            request.setAttribute("SELECTED_SUBJECT", selectedSubject);
+                            existed = true;
+                            break;
+                        }
+                    }
+                    if(!existed){
+                        request.setAttribute("ERROR", "Id is not available!");
+                    } else {
+                        QuizDAO quizDAO = new QuizDAO();
+                        List<QuizDTO> quizDTOList = quizDAO.getQuiz(selectedSubject.getId(), userDTO.getEmail());
+                        request.setAttribute("HISTORY", quizDTOList);
+                        url = Pages.HOME_USER;
+                    }
                 }
             }
         } catch (Exception e){
+            request.setAttribute("ERROR", e.getMessage());
             LOGGER.info("Exception at LoadHistoryController: " + e.getMessage());
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
