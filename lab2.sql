@@ -1,7 +1,7 @@
-drop database Assignment2_NguyenDucHuy
-create database Assignment2_NguyenDucHuy
+drop database Assignment2
+create database Assignment2
 go
-use Assignment2_NguyenDucHuy
+use Assignment2
 go
 
 create table TblRole (
