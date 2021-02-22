@@ -1,17 +1,22 @@
 package binhtt.dtos;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class QuestionDTO implements Serializable {
     private String id;
     private String question;
-    private String answerA;
-    private String answerB;
-    private String answerC;
-    private String answerD;
-    private int correctAnswer;
     private boolean status;
     private String subId;
+    private List<AnswerOfQuestionDTO> answerOfQuestionDTOS;
+
+    public QuestionDTO(String id, String question, boolean status, String subId, List<AnswerOfQuestionDTO> answerOfQuestionDTOS) {
+        this.id = id;
+        this.question = question;
+        this.status = status;
+        this.subId = subId;
+        this.answerOfQuestionDTOS = answerOfQuestionDTOS;
+    }
 
     public String getId() {
         return id;
@@ -29,44 +34,12 @@ public class QuestionDTO implements Serializable {
         this.question = question;
     }
 
-    public String getAnswerA() {
-        return answerA;
+    public boolean isStatus() {
+        return status;
     }
 
-    public void setAnswerA(String answerA) {
-        this.answerA = answerA;
-    }
-
-    public String getAnswerB() {
-        return answerB;
-    }
-
-    public void setAnswerB(String answerB) {
-        this.answerB = answerB;
-    }
-
-    public String getAnswerC() {
-        return answerC;
-    }
-
-    public void setAnswerC(String answerC) {
-        this.answerC = answerC;
-    }
-
-    public String getAnswerD() {
-        return answerD;
-    }
-
-    public void setAnswerD(String answerD) {
-        this.answerD = answerD;
-    }
-
-    public int getCorrectAnswer() {
-        return correctAnswer;
-    }
-
-    public void setCorrectAnswer(int correctAnswer) {
-        this.correctAnswer = correctAnswer;
+    public void setStatus(boolean status) {
+        this.status = status;
     }
 
     public String getSubId() {
@@ -77,23 +50,11 @@ public class QuestionDTO implements Serializable {
         this.subId = subId;
     }
 
-    public boolean isStatus() {
-        return status;
+    public List<AnswerOfQuestionDTO> getAnswerOfQuestionDTOS() {
+        return answerOfQuestionDTOS;
     }
 
-    public void setStatus(boolean status) {
-        this.status = status;
-    }
-
-    public QuestionDTO(String id, String question, String answerA, String answerB, String answerC, String answerD, int correctAnswer, boolean status, String subId) {
-        this.id = id;
-        this.question = question;
-        this.answerA = answerA;
-        this.answerB = answerB;
-        this.answerC = answerC;
-        this.answerD = answerD;
-        this.correctAnswer = correctAnswer;
-        this.subId = subId;
-        this.status = status;
+    public void setAnswerOfQuestionDTOS(List<AnswerOfQuestionDTO> answerOfQuestionDTOS) {
+        this.answerOfQuestionDTOS = answerOfQuestionDTOS;
     }
 }
