@@ -9,9 +9,12 @@ import binhtt.constants.Controllers;
 import binhtt.constants.Pages;
 import binhtt.constants.Roles;
 import binhtt.daos.QuestionDAO;
+import binhtt.dtos.AnswerOfQuestionDTO;
 import binhtt.dtos.QuestionDTO;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -49,15 +52,17 @@ public class CreateQuestionController extends HttpServlet {
             if(userDTO.getRole() == Roles.USER){
                 request.setAttribute("ERROR", "Cannot insert!");
             } else {
+                List<AnswerOfQuestionDTO> answers = new ArrayList<>();
                 String question = request.getParameter("question");
-                String answerA = request.getParameter("answerA");
-                String answerB = request.getParameter("answerB");
-                String answerC = request.getParameter("answerC");
-                String answerD = request.getParameter("answerD");
+                int count = Integer.parseInt(request.getParameter("count"));
                 String correctAnswer = request.getParameter("correctAnswer");
                 String subject = request.getParameter("subject");
                 QuestionDAO questionDAO = new QuestionDAO();
-                QuestionDTO questionDTO = new QuestionDTO(questionDAO.generateId(subject), question, answerA, answerB, answerC, answerD, Integer.parseInt(correctAnswer), true, subject);
+                answers.add(new AnswerOfQuestionDTO(questionDAO.generateId(subject) + "_" + 0, "", false, questionDAO.generateId(subject)));
+                for(int i = 0; i < count; i++){
+                    answers.add(new AnswerOfQuestionDTO(questionDAO.generateId(subject) + "_" + (i + 1), request.getParameter("answer" + (i + 1)), (i + 1) == Integer.parseInt(correctAnswer), questionDAO.generateId(subject)));
+                }
+                QuestionDTO questionDTO = new QuestionDTO(questionDAO.generateId(subject), question, true, subject, answers);
                 boolean check = questionDAO.create(questionDTO);
                 if (!check) {
                     request.setAttribute("ERROR", "Error");
@@ -66,6 +71,7 @@ public class CreateQuestionController extends HttpServlet {
                 }
             }
         } catch (Exception e) {
+            e.printStackTrace();
             request.setAttribute("ERROR", e.getMessage());
             LOGGER.info("Exception at CreateQuizController: " + e.getMessage());
         } finally {

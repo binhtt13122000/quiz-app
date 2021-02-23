@@ -41,11 +41,12 @@ public class QuestionDAO implements Serializable {
             preparedStatement.setString(1,questionDTO.getId());
             preparedStatement.setString(2, questionDTO.getQuestion());
             preparedStatement.setString(3, questionDTO.getSubId());
-            preparedStatement = connection.prepareStatement(sqlAnswer);
             int numOfQuestion = preparedStatement.executeUpdate();
+            preparedStatement = connection.prepareStatement(sqlAnswer);
             int numOfAnswer = 0;
             for (AnswerOfQuestionDTO answer: questionDTO.getAnswerOfQuestionDTOS()) {
                 preparedStatement = connection.prepareStatement(sqlAnswer);
+                System.out.println(answer.getId());
                 preparedStatement.setString(1, answer.getId());
                 preparedStatement.setString(2, answer.getContent());
                 preparedStatement.setBoolean(3, answer.isCorrect());
@@ -113,10 +114,14 @@ public class QuestionDAO implements Serializable {
     }
 
     public List<QuestionDTO> getQuestions(int page, String name, boolean status,String subjectId) throws Exception{
-        HashMap<String, QuestionDTO> questionDTOHashMap = new HashMap<>();
-
+        List<QuestionDTO> questionDTOs = new ArrayList<>();
+        Connection ansConnection = null;
+        PreparedStatement ansPs = null;
+        ResultSet ansRs = null;
+        String questionId = null;
         try {
-            String sql = "select q.id as id, q.question_content, q.subId, q.status, tAOQ.isCorrect, tAOQ.answer_content, tAOQ.id as answerId from TblQuestion q join tblAnswerOfQuestion tAOQ on q.id = tAOQ.questionId where question_content like ? and (? = 'all' or subId = ?) and (? = 1 or status = 0) order by question_content desc offset ?*(? - 1) rows fetch next ? rows only";
+            String sql = "select id, question_content, subId, status from TblQuestion where question_content like ? and (? = 'all' or subId = ?) and (? = 1 or status = 0) order by question_content desc offset ?*(? - 1) rows fetch next ? rows only";
+            String sqlAnswer = "select id, answer_content, isCorrect, questionId from tblAnswerOfQuestion where questionId = ?";
             connection = MyConnection.getConnection();
             preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, "%" + name + "%");
@@ -128,21 +133,33 @@ public class QuestionDAO implements Serializable {
             preparedStatement.setInt(7, Constants.PAGE_SIZE);
             resultSet = preparedStatement.executeQuery();
             while (resultSet.next()){
-                AnswerOfQuestionDTO answer = new AnswerOfQuestionDTO(resultSet.getString("answerId"), resultSet.getString("answer_content"), resultSet.getBoolean("isCorrect"), resultSet.getString("id"));
-                String id = resultSet.getString("id");
-                if(questionDTOHashMap.containsKey(id)){
-                    questionDTOHashMap.get(id).getAnswerOfQuestionDTOS().add(answer);
-                } else {
-                    List<AnswerOfQuestionDTO> answers = new ArrayList<>();
-                    answers.add(answer);
-                    QuestionDTO questionDTO = new QuestionDTO(id, resultSet.getString("question_content"), resultSet.getBoolean("status"), resultSet.getString("subId"), answers);
-                    questionDTOHashMap.put(id, questionDTO);
+                List<AnswerOfQuestionDTO> answers = new ArrayList<>();
+                try {
+                    questionId = resultSet.getString("id");
+                    ansConnection = MyConnection.getConnection();
+                    ansPs = ansConnection.prepareStatement(sqlAnswer);
+                    ansPs.setString(1, questionId);
+                    ansRs = ansPs.executeQuery();
+                    while (ansRs.next()){
+                        answers.add(new AnswerOfQuestionDTO(ansRs.getString("id"), ansRs.getString("answer_content"), ansRs.getBoolean("isCorrect"), questionId));
+                    }
+                } finally {
+                    if(ansRs != null){
+                        ansRs.close();
+                    }
+                    if(ansPs != null){
+                        ansPs.close();
+                    }
+                    if(ansConnection != null){
+                        ansConnection.close();
+                    }
                 }
+                questionDTOs.add(new QuestionDTO(questionId, resultSet.getString("question_content"), resultSet.getBoolean("status"), resultSet.getString("subId"), answers));
             }
         } finally {
             closeConnection();
         }
-        return new ArrayList<>(questionDTOHashMap.values());
+        return questionDTOs;
     }
 
     public int getTotalOfQuestions(String name, boolean status,String subjectId) throws Exception{

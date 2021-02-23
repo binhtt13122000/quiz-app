@@ -9,9 +9,12 @@ import binhtt.constants.Controllers;
 import binhtt.constants.Pages;
 import binhtt.constants.Roles;
 import binhtt.daos.QuestionDAO;
+import binhtt.dtos.AnswerOfQuestionDTO;
 import binhtt.dtos.QuestionDTO;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -52,13 +55,15 @@ public class UpdateQuestionController extends HttpServlet {
             } else {
                 String id = request.getParameter("id");
                 String question = request.getParameter("updateQuestion");
-                String answerA = request.getParameter("updateAnswerA");
-                String answerB = request.getParameter("updateAnswerB");
-                String answerC = request.getParameter("updateAnswerC");
-                String answerD = request.getParameter("updateAnswerD");
                 String correctAnswer = request.getParameter("updateCorrectAnswer");
                 String subject = request.getParameter("updateSubject");
-                QuestionDTO questionDTO = new QuestionDTO(id, question, answerA, answerB, answerC, answerD, Integer.parseInt(correctAnswer), true, subject);
+                int count = Integer.parseInt(request.getParameter("count"));
+                List<AnswerOfQuestionDTO> answers = new ArrayList<>();
+                answers.add(new AnswerOfQuestionDTO(id + "_" + 0, "", false, id));
+                for(int i = 0; i < count; i++){
+                    answers.add(new AnswerOfQuestionDTO(id + "_" + (i + 1), request.getParameter("updateAnswer" + (i + 1)), (i + 1) == Integer.parseInt(correctAnswer), id));
+                }
+                QuestionDTO questionDTO = new QuestionDTO(id, question, true, subject, answers);
                 QuestionDAO questionDAO = new QuestionDAO();
                 boolean check = questionDAO.update(questionDTO);
                 if (!check) {

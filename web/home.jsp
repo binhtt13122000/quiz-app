@@ -95,7 +95,7 @@
                         <c:if test="${param.isDeleted == null || empty param.isDeleted.trim()}" var="checkDelete">
                             <input type="checkbox" class="form-check-inline" name="isDeleted" value="isDeleted"/>
                         </c:if>
-                        <c:if test="${!checkDelete}" >
+                        <c:if test="${!checkDelete}">
                             <input checked="true" type="checkbox" class="form-check-inline" name="isDeleted" value=""/>
                         </c:if>
                         <label>Deleted</label>
@@ -112,7 +112,9 @@
                 <nav class="d-none d-md-block" aria-label="Page navigation questions">
                     <ul class="pagination">
                         <li class="page-item ${param.page == 1 ? 'disabled': ''}">
-                            <fmt:parseNumber var="pageIndex" value="${param.page > requestScope.TOTAL_PAGE ? '1':param.page}" integerOnly="true"/>
+                            <fmt:parseNumber var="pageIndex"
+                                             value="${param.page > requestScope.TOTAL_PAGE ? '1':param.page}"
+                                             integerOnly="true"/>
                             <a class="page-link ${param.page == 1 ? 'disabled-link': ''}" style="color: #2dcc70"
                                href="loadQuestion?page=${pageIndex - 1}&questionContent=${param.questionContent}&subjectId=${param.subjectId}&isDeleted=${param.isDeleted}"
                                aria-label="Previous">
@@ -145,37 +147,36 @@
             <div class="card mt-3">
                 <div class="card-header">
                     <div>
-                            [${question.id}] ${question.question}
+                        [${question.id}] ${question.question}
                     </div>
                 </div>
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-sm-12 col-md-6 ${question.correctAnswer == 1 ? 'bg-info text-white': ''}">
-                            A. ${question.answerA}
-                        </div>
-                        <div class="col-sm-12 col-md-6 ${question.correctAnswer == 2 ? 'bg-info text-white': ''}">
-                            B. ${question.answerB}
-                        </div>
-                        <div class="col-sm-12 col-md-6 ${question.correctAnswer == 3 ? 'bg-info text-white': ''}">
-                            C. ${question.answerC}
-                        </div>
-                        <div class="col-sm-12 col-md-6 ${question.correctAnswer == 4 ? 'bg-info text-white': ''}">
-                            D. ${question.answerD}
-                        </div>
+                        <c:forEach items="${question.answerOfQuestionDTOS}" var="answer" varStatus="count">
+                            <c:if test="${!answer.id.endsWith('_0')}">
+                                <div class="col-sm-12 col-md-6 ${answer.correct ? 'bg-info text-white': ''}">
+                                        ${count.count - 1}. ${answer.content}
+                                </div>
+                            </c:if>
+                        </c:forEach>
                     </div>
                 </div>
                 <div class="card-footer">
                     <div class="d-flex justify-content-end">
-                        <button class="btn btn-primary mr-1" data-toggle="modal" data-target="#updateModal-${question.id}">
+                        <button class="btn btn-primary mr-1" data-toggle="modal"
+                                data-target="#updateModal-${question.id}">
                             Update
                         </button>
-                        <div class="modal fade" id="updateModal-${question.id}" tabindex="-1" aria-labelledby="updateModal-${question.id}-Label"
+                        <div class="modal fade" id="updateModal-${question.id}" tabindex="-1"
+                             aria-labelledby="updateModal-${question.id}-Label"
                              aria-hidden="true">
                             <div class="modal-dialog modal-xl">
-                                <form method="post" action="updateQuestion?id=${question.id}&page=${param.page}&questionContent=${param.questionContent}&subjectId=${param.subjectId}&isDeleted=${param.isDeleted}">
+                                <form method="post"
+                                      action="updateQuestion?id=${question.id}&page=${param.page}&questionContent=${param.questionContent}&subjectId=${param.subjectId}&isDeleted=${param.isDeleted}">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h5 class="modal-title" id="updateModal-${question.id}-Label">Update Exercise</h5>
+                                            <h5 class="modal-title" id="updateModal-${question.id}-Label">Update
+                                                Exercise</h5>
                                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                 <span aria-hidden="true">&times;</span>
                                             </button>
@@ -185,66 +186,73 @@
                                                 <div class="col-sm-12 col-md-6">
                                                     <div class="form-group">
                                                         <label>Question</label>
-                                                        <input class="form-control" name="updateQuestion" value="${question.question}"/>
+                                                        <input class="form-control" name="updateQuestion"
+                                                               value="${question.question}"/>
                                                     </div>
-                                                    <div class="form-group">
-                                                        <label>Answer A</label>
-                                                        <input class="form-control" name="updateAnswerA" value="${question.answerA}"/>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label>Answer B</label>
-                                                        <input class="form-control" name="updateAnswerB" value="${question.answerB}"/>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label>Answer C</label>
-                                                        <input class="form-control" name="updateAnswerC" value="${question.answerC}"/>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label>Answer D</label>
-                                                        <input class="form-control" name="updateAnswerD" value="${question.answerD}"/>
-                                                    </div>
+                                                    <input type="hidden" name="count" value="${question.answerOfQuestionDTOS.size() - 1}" />
+                                                    <c:forEach items="${question.answerOfQuestionDTOS}" var="answer"
+                                                               varStatus="counter">
+                                                        <div class="form-group">
+                                                            <c:if test="${!answer.id.endsWith('_0')}">
+                                                                <label>Answer ${counter.count - 1}</label>
+                                                                <input class="form-control"
+                                                                       name="updateAnswer${counter.count - 1}"
+                                                                       value="${answer.content}"/>
+                                                            </c:if>
+                                                        </div>
+                                                    </c:forEach>
                                                 </div>
                                                 <div class="col-sm-12 col-md-6">
                                                     <div class="form-group">
                                                         <label>Correct Answer</label>
-                                                        <select name="updateCorrectAnswer" class="custom-select form-control">
-                                                            <c:forEach step="1" begin="1" end="4" varStatus="count">
-                                                                <c:if test="${count.count == question.correctAnswer}" var="checkedAnswer">
-                                                                    <option selected="selected" value="${count.count}">
-                                                                        <sup>&#${count.count + 64};</sup>
-                                                                    </option>
+                                                        <select name="updateCorrectAnswer"
+                                                                class="custom-select form-control">
+                                                            <c:forEach step="1" begin="1"
+                                                                       end="${question.answerOfQuestionDTOS.size() - 1}"
+                                                                       varStatus="count">
+                                                            <c:if test="${question.answerOfQuestionDTOS.get(count.count).correct}"
+                                                                  var="checkedAnswer">
+                                                                <option selected="selected" value="${count.count}">
+                                                                        ${count.count}
+                                                                </option>
+                                                            </c:if>
+                                                            <c:if test="${!checkedAnswer}">
+                                                            <option value="${count.count}">
+                                                                    ${count.count}
                                                                 </c:if>
-                                                                <c:if test="${!checkedAnswer}">
-                                                                    <option value="${count.count}"><sup>&#${count.count + 64};</sup></option>
-                                                                </c:if>
-                                                            </c:forEach>
+                                                                </c:forEach>
                                                         </select>
                                                     </div>
                                                     <div class="form-group">
                                                         <label>Subject</label>
-                                                        <input type="hidden" name="updateSubject" value="${question.subId}"/>
-                                                        <input disabled class="form-control" value="${question.subId}" />
+                                                        <input type="hidden" name="updateSubject"
+                                                               value="${question.subId}"/>
+                                                        <input disabled class="form-control" value="${question.subId}"/>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="modal-footer">
                                             <button type="submit" class="btn btn-success">Update Exercise</button>
-                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close
+                                            </button>
                                         </div>
                                     </div>
                                 </form>
                             </div>
                         </div>
                         <c:if test="${question.status}">
-                            <button class="btn btn-danger" data-toggle="modal" data-target="#deleteModal-${question.id}">
+                            <button class="btn btn-danger" data-toggle="modal"
+                                    data-target="#deleteModal-${question.id}">
                                 Delete
                             </button>
-                            <div class="modal fade" id="deleteModal-${question.id}" tabindex="-1" aria-labelledby="deleteModal-${question.id}-Label" aria-hidden="true">
+                            <div class="modal fade" id="deleteModal-${question.id}" tabindex="-1"
+                                 aria-labelledby="deleteModal-${question.id}-Label" aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h5 class="modal-title" id="deleteModal-${question.id}-Label">Delete modal</h5>
+                                            <h5 class="modal-title" id="deleteModal-${question.id}-Label">Delete
+                                                modal</h5>
                                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                 <span aria-hidden="true">&times;</span>
                                             </button>
@@ -253,8 +261,12 @@
                                             Do you confirm to delete?
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                            <button type="button" class="btn btn-danger" onclick="location.href='deleteQuestion?id=${question.id}&page=${param.page}&questionContent=${param.questionContent}&subjectId=${param.subjectId}&isDeleted=${param.isDeleted}'">Delete</button>
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close
+                                            </button>
+                                            <button type="button" class="btn btn-danger"
+                                                    onclick="location.href='deleteQuestion?id=${question.id}&page=${param.page}&questionContent=${param.questionContent}&subjectId=${param.subjectId}&isDeleted=${param.isDeleted}'">
+                                                Delete
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
@@ -273,7 +285,8 @@
     <div class="modal fade createModal" id="createModal" tabindex="-1" aria-labelledby="createModalLabel"
          aria-hidden="true">
         <div class="modal-dialog modal-xl">
-            <form method="post" action="createQuestion?page=${param.page}&questionContent=${param.questionContent}&subjectId=${param.subjectId}&isDeleted=${param.isDeleted}">
+            <form method="post"
+                  action="createQuestion?page=${param.page}&questionContent=${param.questionContent}&subjectId=${param.subjectId}&isDeleted=${param.isDeleted}">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="createModalLabel">Create Exercise</h5>
@@ -289,30 +302,16 @@
                                     <input class="form-control" name="question" value="${param.question}"/>
                                 </div>
                                 <div class="form-group">
-                                    <label>Answer A</label>
-                                    <input class="form-control" name="answerA" value="${param.answerA}"/>
+                                    <label>How many answer</label>
+                                    <input id="count" type="number" class="form-control" name="count"
+                                           value="${param.count}"/>
                                 </div>
-                                <div class="form-group">
-                                    <label>Answer B</label>
-                                    <input class="form-control" name="answerB" value="${param.answerB}"/>
-                                </div>
-                                <div class="form-group">
-                                    <label>Answer C</label>
-                                    <input class="form-control" name="answerC" value="${param.answerC}"/>
-                                </div>
-                                <div class="form-group">
-                                    <label>Answer D</label>
-                                    <input class="form-control" name="answerD" value="${param.answerD}"/>
-                                </div>
+                                <div id="listAnswer"></div>
                             </div>
                             <div class="col-sm-12 col-md-6">
                                 <div class="form-group">
                                     <label>Correct Answer</label>
-                                    <select name="correctAnswer" class="custom-select form-control">
-                                        <option value="1">A</option>
-                                        <option value="2">B</option>
-                                        <option value="3">C</option>
-                                        <option value="4">D</option>
+                                    <select id="correctAnswer" name="correctAnswer" class="custom-select form-control">
                                     </select>
                                 </div>
                                 <div class="form-group">
@@ -341,6 +340,25 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns"
         crossorigin="anonymous"></script>
+<script>
+    $(document).ready(function () {
+        $("#count").change(function (e) {
+            e.preventDefault();
+            let numberOfQuestions = parseInt($("#count").val());
+            let str = "";
+            let strOption = "";
+            for (let i = 0; i < numberOfQuestions; i++) {
+                str += '<div class="form-group"><label>Answer ' + (i + 1) + '</label><input class="form-control" name="answer' + (i + 1) + '"/></div>'
+                strOption += '<option value="' + (i + 1) + '">' + (i + 1) + '</option>'
+            }
+            $('#listAnswer').empty();
+            $('#correctAnswer').empty();
+
+            $('#listAnswer').append(str);
+            $('#correctAnswer').append(strOption);
+        });
+    });
+</script>
 </body>
 </html>
 
