@@ -7,9 +7,9 @@ public class AnswerDTO implements Serializable {
     private String quizId;
     private String questionId;
     private boolean isCorrect;
-    private int choice;
+    private String choice;
 
-    public AnswerDTO(String id, String quizId, String questionId, boolean isCorrect, int choice) {
+    public AnswerDTO(String id, String quizId, String questionId, boolean isCorrect, String choice) {
         this.id = id;
         this.quizId = quizId;
         this.questionId = questionId;
@@ -49,11 +49,11 @@ public class AnswerDTO implements Serializable {
         isCorrect = correct;
     }
 
-    public int getChoice() {
+    public String getChoice() {
         return choice;
     }
 
-    public void setChoice(int choice) {
+    public void setChoice(String choice) {
         this.choice = choice;
     }
 }

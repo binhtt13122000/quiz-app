@@ -1,6 +1,7 @@
 package binhtt.daos;
 
 import binhtt.db.MyConnection;
+import binhtt.dtos.AnswerOfQuestionDTO;
 import binhtt.dtos.QuestionDTO;
 import binhtt.dtos.QuizDTO;
 
@@ -70,7 +71,15 @@ public class QuizDAO implements Serializable {
                 preparedStatement.setString(2, quizId);
                 preparedStatement.setString(3, questionDTO.getId());
                 preparedStatement.setBoolean(4, false);
-                preparedStatement.setInt(5, 0);
+                String idOfNotChosen = "";
+                for (AnswerOfQuestionDTO answer: questionDTO.getAnswerOfQuestionDTOS()) {
+                    int index = Integer.parseInt(answer.getId().split("-")[answer.getId().split("-").length - 1]);
+                    if(index == 0){
+                        idOfNotChosen = answer.getId();
+                        break;
+                    }
+                }
+                preparedStatement.setString(5, idOfNotChosen);
                 checkAnswer += preparedStatement.executeUpdate();
             }
             if(checkQuiz + checkAnswer == questionDTOS.size() + 1){
@@ -89,7 +98,16 @@ public class QuizDAO implements Serializable {
         int index = 0;
         int point = 0;
         for (String answer: answers) {
-            if(questionDTOS.get(index++).getCorrectAnswer() == Integer.parseInt(answer)){
+            List<AnswerOfQuestionDTO> answerOfQuestionDTOS = questionDTOS.get(index++).getAnswerOfQuestionDTOS();
+            String rightAnswerId = "";
+            for (AnswerOfQuestionDTO ans: answerOfQuestionDTOS) {
+                if(ans.isCorrect()){
+                    rightAnswerId = ans.getId();
+                    break;
+                }
+            }
+            int indexRightAnswer = Integer.parseInt(rightAnswerId.split("-")[rightAnswerId.split("-").length - 1]);
+            if(indexRightAnswer == Integer.parseInt(answer)){
                 point += (100 / questionDTOS.size());
             }
         }
@@ -98,31 +116,12 @@ public class QuizDAO implements Serializable {
 
     public boolean submit(String quizId, String[] answers, List<QuestionDTO> questionDTOS) throws Exception {
         try {
-            String sqlAnswer = "update TblAnswer set choice = ?, isCorrect = ? where quizId = ? and questionId = ?";
             String sqlQuiz = "update TblQuiz set point = ? where id = ?";
             connection = MyConnection.getConnection();
-            connection.setAutoCommit(false);
-            int checkAnswer = 0;
-            int index = 0;
-            for (String answer: answers) {
-                preparedStatement = connection.prepareStatement(sqlAnswer);
-                preparedStatement.setInt(1, Integer.parseInt(answer));
-                preparedStatement.setBoolean(2, Integer.parseInt(answer) == questionDTOS.get(index).getCorrectAnswer());
-                preparedStatement.setString(3, quizId);
-                preparedStatement.setString(4, questionDTOS.get(index++).getId());
-                checkAnswer += preparedStatement.executeUpdate();
-            }
             preparedStatement = connection.prepareStatement(sqlQuiz);
             preparedStatement.setInt(1, getPoint(answers, questionDTOS));
             preparedStatement.setString(2, quizId);
-            int checkQuiz = preparedStatement.executeUpdate();
-            if(checkQuiz + checkAnswer == questionDTOS.size() + 1){
-                connection.commit();
-                return true;
-            } else {
-                connection.rollback();
-                return false;
-            }
+            return preparedStatement.executeUpdate() > 0;
         } finally {
             closeConnection();
         }

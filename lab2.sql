@@ -32,12 +32,12 @@ create table TblQuestion (
 	subID varchar (50) foreign key references TblSubject(id)
 )
 
-create table tblAnswerOfQuestion {
+create table tblAnswerOfQuestion (
     id varchar(50) primary key not null,
-    answer_content nvarchar(MAX not null,
+    answer_content nvarchar(MAX) not null,
     isCorrect bit default 0,
     questionId varchar(50) foreign key references TblQuestion(id)
-}
+)
 
 create table TblQuiz (
 	id varchar(50) primary key not null,
@@ -53,7 +53,7 @@ create table TblAnswer (
 	quizId varchar(50) foreign key references TblQuiz(id),
 	questionId varchar(50) foreign key references TblQuestion(id),
 	isCorrect bit not null,
-	choice int check (choice > -1 and choice < 5) default 0,
+	choice varchar(50) foreign key references tblAnswerOfQuestion(id),
 )
 
 

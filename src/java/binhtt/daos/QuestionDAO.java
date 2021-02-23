@@ -2,6 +2,7 @@ package binhtt.daos;
 
 import binhtt.constants.Constants;
 import binhtt.db.MyConnection;
+import binhtt.dtos.AnswerOfQuestionDTO;
 import binhtt.dtos.QuestionDTO;
 
 import java.io.Serializable;
@@ -9,6 +10,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class QuestionDAO implements Serializable {
@@ -31,18 +33,32 @@ public class QuestionDAO implements Serializable {
     public boolean create(QuestionDTO questionDTO) throws Exception{
         boolean isSuccess;
         try {
-            String sql = "insert into TblQuestion(id, question_content, answerA, answerB, answerC, answerD, correctAnswer, status, subId) values (?,?,?,?,?,?,?,1,?)";
+            String sql = "insert into TblQuestion(id, question_content, status, subId) values (?,?,1,?)";
+            String sqlAnswer = "insert into tblAnswerOfQuestion(id, answer_content, isCorrect, questionId) values (?, ?, ?, ?)";
             connection = MyConnection.getConnection();
+            connection.setAutoCommit(false);
             preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1,questionDTO.getId());
             preparedStatement.setString(2, questionDTO.getQuestion());
-            preparedStatement.setString(3, questionDTO.getAnswerA());
-            preparedStatement.setString(4, questionDTO.getAnswerB());
-            preparedStatement.setString(5, questionDTO.getAnswerC());
-            preparedStatement.setString(6, questionDTO.getAnswerD());
-            preparedStatement.setInt(7, questionDTO.getCorrectAnswer());
-            preparedStatement.setString(8, questionDTO.getSubId());
-            isSuccess = preparedStatement.executeUpdate() > 0;
+            preparedStatement.setString(3, questionDTO.getSubId());
+            preparedStatement = connection.prepareStatement(sqlAnswer);
+            int numOfQuestion = preparedStatement.executeUpdate();
+            int numOfAnswer = 0;
+            for (AnswerOfQuestionDTO answer: questionDTO.getAnswerOfQuestionDTOS()) {
+                preparedStatement = connection.prepareStatement(sqlAnswer);
+                preparedStatement.setString(1, answer.getId());
+                preparedStatement.setString(2, answer.getContent());
+                preparedStatement.setBoolean(3, answer.isCorrect());
+                preparedStatement.setString(4, answer.getQuestionId());
+                numOfAnswer += preparedStatement.executeUpdate();
+            }
+            if(numOfQuestion + numOfAnswer == 1 + questionDTO.getAnswerOfQuestionDTOS().size()){
+                isSuccess = true;
+                connection.commit();
+            } else {
+                isSuccess = false;
+                connection.rollback();
+            }
         } finally {
             closeConnection();
         }
@@ -52,18 +68,30 @@ public class QuestionDAO implements Serializable {
     public boolean update(QuestionDTO questionDTO) throws Exception {
         boolean isSuccess;
         try {
-            String sql = "update TblQuestion set question_content = ?, answerA = ?, answerB = ?, answerC = ?, answerD = ?, correctAnswer = ?, subId = ? where id = ?";
+            String sql = "update TblQuestion set question_content = ?, subId = ? where id = ?";
+            String answerSql = "update tblAnswerOfQuestion set answer_content = ?, isCorrect = ? where id = ?";
             connection = MyConnection.getConnection();
+            connection.setAutoCommit(false);
             preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, questionDTO.getQuestion());
-            preparedStatement.setString(2, questionDTO.getAnswerA());
-            preparedStatement.setString(3, questionDTO.getAnswerB());
-            preparedStatement.setString(4, questionDTO.getAnswerC());
-            preparedStatement.setString(5, questionDTO.getAnswerD());
-            preparedStatement.setInt(6, questionDTO.getCorrectAnswer());
-            preparedStatement.setString(7, questionDTO.getSubId());
-            preparedStatement.setString(8, questionDTO.getId());
-            isSuccess = preparedStatement.executeUpdate() > 0;
+            preparedStatement.setString(2, questionDTO.getSubId());
+            preparedStatement.setString(3, questionDTO.getId());
+            int numOfQuestion = preparedStatement.executeUpdate();
+            int numOfAnswer = 0;
+            for (AnswerOfQuestionDTO answer: questionDTO.getAnswerOfQuestionDTOS()) {
+                preparedStatement = connection.prepareStatement(answerSql);
+                preparedStatement.setString(1, answer.getContent());
+                preparedStatement.setBoolean(2, answer.isCorrect());
+                preparedStatement.setString(3, answer.getId());
+                numOfAnswer += preparedStatement.executeUpdate();
+            }
+            if(numOfQuestion + numOfAnswer == 1 + questionDTO.getAnswerOfQuestionDTOS().size()){
+                isSuccess = true;
+                connection.commit();
+            } else {
+                isSuccess = false;
+                connection.rollback();
+            }
         } finally {
             closeConnection();
         }
@@ -85,10 +113,10 @@ public class QuestionDAO implements Serializable {
     }
 
     public List<QuestionDTO> getQuestions(int page, String name, boolean status,String subjectId) throws Exception{
-        List<QuestionDTO> questionDTOS = new ArrayList<>();
+        HashMap<String, QuestionDTO> questionDTOHashMap = new HashMap<>();
 
         try {
-            String sql = "select id, question_content, answerA, answerB, answerC, answerD, subId, status, correctAnswer from TblQuestion where question_content like ? and (? = 'all' or subId = ?) and (? = 1 or status = 0) order by question_content desc offset ?*(? - 1) rows fetch next ? rows only";
+            String sql = "select q.id as id, q.question_content, q.subId, q.status, tAOQ.isCorrect, tAOQ.answer_content, tAOQ.id as answerId from TblQuestion q join tblAnswerOfQuestion tAOQ on q.id = tAOQ.questionId where question_content like ? and (? = 'all' or subId = ?) and (? = 1 or status = 0) order by question_content desc offset ?*(? - 1) rows fetch next ? rows only";
             connection = MyConnection.getConnection();
             preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, "%" + name + "%");
@@ -100,12 +128,21 @@ public class QuestionDAO implements Serializable {
             preparedStatement.setInt(7, Constants.PAGE_SIZE);
             resultSet = preparedStatement.executeQuery();
             while (resultSet.next()){
-                questionDTOS.add(new QuestionDTO(resultSet.getString("id"), resultSet.getString("question_content"), resultSet.getString("answerA"), resultSet.getString("answerB"), resultSet.getString("answerC"), resultSet.getString("answerD"), resultSet.getInt("correctAnswer"), resultSet.getBoolean("status"), resultSet.getString("subId")));
+                AnswerOfQuestionDTO answer = new AnswerOfQuestionDTO(resultSet.getString("answerId"), resultSet.getString("answer_content"), resultSet.getBoolean("isCorrect"), resultSet.getString("id"));
+                String id = resultSet.getString("id");
+                if(questionDTOHashMap.containsKey(id)){
+                    questionDTOHashMap.get(id).getAnswerOfQuestionDTOS().add(answer);
+                } else {
+                    List<AnswerOfQuestionDTO> answers = new ArrayList<>();
+                    answers.add(answer);
+                    QuestionDTO questionDTO = new QuestionDTO(id, resultSet.getString("question_content"), resultSet.getBoolean("status"), resultSet.getString("subId"), answers);
+                    questionDTOHashMap.put(id, questionDTO);
+                }
             }
         } finally {
             closeConnection();
         }
-        return questionDTOS;
+        return new ArrayList<>(questionDTOHashMap.values());
     }
 
     public int getTotalOfQuestions(String name, boolean status,String subjectId) throws Exception{
@@ -130,21 +167,29 @@ public class QuestionDAO implements Serializable {
 
 
     public List<QuestionDTO> getQuestionsForTest(int questionPerQuiz, String subjectId) throws Exception{
-        List<QuestionDTO> questionDTOS = new ArrayList<>();
+        HashMap<String, QuestionDTO> questionDTOHashMap = new HashMap<>();
         try {
-            String sql = "select id, question_content, answerA, answerB, answerC, answerD, subId, status, correctAnswer from TblQuestion where subId = ? and status = 1 order by newid()";
+            String sql = "select q.id as id, q.question_content, q.subId, q.status, tAOQ.isCorrect, tAOQ.answer_content, tAOQ.id as answerId from TblQuestion q join tblAnswerOfQuestion tAOQ on q.id = tAOQ.questionId where subID = ? and status = 1 order by newid()";
             connection = MyConnection.getConnection();
             preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, subjectId);
             preparedStatement.setMaxRows(questionPerQuiz);
-            resultSet = preparedStatement.executeQuery();
             while (resultSet.next()){
-                questionDTOS.add(new QuestionDTO(resultSet.getString("id"), resultSet.getString("question_content"), resultSet.getString("answerA"), resultSet.getString("answerB"), resultSet.getString("answerC"), resultSet.getString("answerD"), resultSet.getInt("correctAnswer"), resultSet.getBoolean("status"), resultSet.getString("subId")));
+                AnswerOfQuestionDTO answer = new AnswerOfQuestionDTO(resultSet.getString("answerId"), resultSet.getString("answer_content"), resultSet.getBoolean("isCorrect"), resultSet.getString("id"));
+                String id = resultSet.getString("id");
+                if(questionDTOHashMap.containsKey(id)){
+                    questionDTOHashMap.get(id).getAnswerOfQuestionDTOS().add(answer);
+                } else {
+                    List<AnswerOfQuestionDTO> answers = new ArrayList<>();
+                    answers.add(answer);
+                    QuestionDTO questionDTO = new QuestionDTO(id, resultSet.getString("question_content"), resultSet.getBoolean("status"), resultSet.getString("subId"), answers);
+                    questionDTOHashMap.put(id, questionDTO);
+                }
             }
         } finally {
             closeConnection();
         }
-        return questionDTOS;
+        return new ArrayList<>(questionDTOHashMap.values());
     }
 
 
