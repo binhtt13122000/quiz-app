@@ -105,18 +105,13 @@
                 </div>
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-12 mb-2">
-                            <div id="question-${question.id}-A" onclick="choose('question-${question.id}-A', 'answer-${question.id}', ${count.count}, 1)" class="answer-${question.id} card" style="cursor: pointer; border-radius: 10px">A. ${question.answerA}</div>
-                        </div>
-                        <div class="col-12 mb-2">
-                            <div id="question-${question.id}-B" onclick="choose('question-${question.id}-B', 'answer-${question.id}', ${count.count}, 2)" class="answer-${question.id} card" style="cursor: pointer; border-radius: 10px">B. ${question.answerB}</div>
-                        </div>
-                        <div class="col-12 mb-2">
-                            <div id="question-${question.id}-C" onclick="choose('question-${question.id}-C', 'answer-${question.id}', ${count.count}, 3)" class="answer-${question.id} card" style="cursor: pointer; border-radius: 10px">C. ${question.answerC}</div>
-                        </div>
-                        <div class="col-12 mb-2">
-                            <div id="question-${question.id}-D" onclick="choose('question-${question.id}-D', 'answer-${question.id}', ${count.count}, 4)" class="answer-${question.id} card" style="cursor: pointer; border-radius: 10px">D. ${question.answerD}</div>
-                        </div>
+                        <c:forEach items="${question.answerOfQuestionDTOS}" var="answer" varStatus="counter">
+                            <c:if test="${!answer.id.endsWith('_0')}">
+                                <div class="col-12 mb-2">
+                                    <div id='answer-${answer.id}' onclick="choose('answer-${answer.id}', 'answer-${question.id}', ${count.count}, '${answer.id}')" class="answer-${question.id} card" style="cursor: pointer; border-radius: 10px">${counter.count - 1}. ${answer.content}</div>
+                                </div>
+                            </c:if>
+                        </c:forEach>
                     </div>
                 </div>
             </div>
@@ -139,12 +134,13 @@
         })
         document.getElementById(id).classList.add('bg-info');
         document.getElementById(id).classList.add('text-white');
-        sessionStorage.setItem('${quizId}-' + index, answer);
+        let answerIndex = answer.split("_")[answer.split("_").length - 1];
+        sessionStorage.setItem('${quizId}-' + index, answerIndex);
     }
 
     function submit(){
         let str = '';
-        for(let i = 0; i < ${sessionScope.SELECTED_SUBJECT.totalOfQuestionsPerQuiz}; i++){
+        for(let i = 0; i < ${sessionScope.LIST_QUESTION.size()}; i++){
             let answer = sessionStorage.getItem('${quizId}-' + (i + 1));
             if(answer === null){
                 answer = '0'

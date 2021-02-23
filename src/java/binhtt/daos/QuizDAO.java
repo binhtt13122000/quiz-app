@@ -73,7 +73,7 @@ public class QuizDAO implements Serializable {
                 preparedStatement.setBoolean(4, false);
                 String idOfNotChosen = "";
                 for (AnswerOfQuestionDTO answer: questionDTO.getAnswerOfQuestionDTOS()) {
-                    int index = Integer.parseInt(answer.getId().split("-")[answer.getId().split("-").length - 1]);
+                    int index = Integer.parseInt(answer.getId().split("_")[answer.getId().split("_").length - 1]);
                     if(index == 0){
                         idOfNotChosen = answer.getId();
                         break;
@@ -106,7 +106,7 @@ public class QuizDAO implements Serializable {
                     break;
                 }
             }
-            int indexRightAnswer = Integer.parseInt(rightAnswerId.split("-")[rightAnswerId.split("-").length - 1]);
+            int indexRightAnswer = Integer.parseInt(rightAnswerId.split("_")[rightAnswerId.split("_").length - 1]);
             if(indexRightAnswer == Integer.parseInt(answer)){
                 point += (100 / questionDTOS.size());
             }

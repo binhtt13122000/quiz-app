@@ -184,29 +184,47 @@ public class QuestionDAO implements Serializable {
 
 
     public List<QuestionDTO> getQuestionsForTest(int questionPerQuiz, String subjectId) throws Exception{
-        HashMap<String, QuestionDTO> questionDTOHashMap = new HashMap<>();
+        Connection ansConnection = null;
+        PreparedStatement ansPs = null;
+        ResultSet ansRs = null;
+        String questionId = null;
+        List<QuestionDTO> questionDTOs = new ArrayList<>();
         try {
-            String sql = "select q.id as id, q.question_content, q.subId, q.status, tAOQ.isCorrect, tAOQ.answer_content, tAOQ.id as answerId from TblQuestion q join tblAnswerOfQuestion tAOQ on q.id = tAOQ.questionId where subID = ? and status = 1 order by newid()";
+            String sql = "select id, question_content, subId, status from TblQuestion where subID = ? and status = 1 order by newid()";
+            String sqlAnswer = "select id, answer_content, isCorrect, questionId from tblAnswerOfQuestion where questionId = ?";
             connection = MyConnection.getConnection();
             preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, subjectId);
             preparedStatement.setMaxRows(questionPerQuiz);
+            resultSet = preparedStatement.executeQuery();
             while (resultSet.next()){
-                AnswerOfQuestionDTO answer = new AnswerOfQuestionDTO(resultSet.getString("answerId"), resultSet.getString("answer_content"), resultSet.getBoolean("isCorrect"), resultSet.getString("id"));
-                String id = resultSet.getString("id");
-                if(questionDTOHashMap.containsKey(id)){
-                    questionDTOHashMap.get(id).getAnswerOfQuestionDTOS().add(answer);
-                } else {
-                    List<AnswerOfQuestionDTO> answers = new ArrayList<>();
-                    answers.add(answer);
-                    QuestionDTO questionDTO = new QuestionDTO(id, resultSet.getString("question_content"), resultSet.getBoolean("status"), resultSet.getString("subId"), answers);
-                    questionDTOHashMap.put(id, questionDTO);
+                List<AnswerOfQuestionDTO> answers = new ArrayList<>();
+                try {
+                    questionId = resultSet.getString("id");
+                    ansConnection = MyConnection.getConnection();
+                    ansPs = ansConnection.prepareStatement(sqlAnswer);
+                    ansPs.setString(1, questionId);
+                    ansRs = ansPs.executeQuery();
+                    while (ansRs.next()){
+                        answers.add(new AnswerOfQuestionDTO(ansRs.getString("id"), ansRs.getString("answer_content"), ansRs.getBoolean("isCorrect"), questionId));
+                    }
+                } finally {
+                    if(ansRs != null){
+                        ansRs.close();
+                    }
+                    if(ansPs != null){
+                        ansPs.close();
+                    }
+                    if(ansConnection != null){
+                        ansConnection.close();
+                    }
                 }
+                questionDTOs.add(new QuestionDTO(questionId, resultSet.getString("question_content"), resultSet.getBoolean("status"), resultSet.getString("subId"), answers));
             }
         } finally {
             closeConnection();
         }
-        return new ArrayList<>(questionDTOHashMap.values());
+        return questionDTOs;
     }
 
 
