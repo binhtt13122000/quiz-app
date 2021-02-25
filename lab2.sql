@@ -48,6 +48,8 @@ create table TblQuiz (
 	point int check (point >= 0 and point <= 100),
 )
 
+alter table TblQuiz
+add isSubmit bit
 create table TblAnswer (
 	id varchar(50) primary key,
 	quizId varchar(50) foreign key references TblQuiz(id),

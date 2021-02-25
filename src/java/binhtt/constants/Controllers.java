@@ -5,4 +5,5 @@ public class Controllers {
     public static final String LOAD_HISTORY_CONTROLLER = "LoadHistoryController";
     public static final String LOGIN = "LoginController";
     public static final String REGISTER = "RegisterController";
+    public static final String LOAD_ANSWER_PAGE_CONTROLLER = "LoadAnswerPageController";
 }

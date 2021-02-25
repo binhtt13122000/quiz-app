@@ -3,22 +3,9 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/binht/OneDrive/Documents/NetBeansProjects/Lab2Quiz/src/java/binhtt/controllers/LoginController.java</file>
-            <file>file:/C:/Users/binht/OneDrive/Documents/NetBeansProjects/Lab2Quiz/web/index.jsp</file>
-            <file>file:/C:/Users/binht/OneDrive/Documents/NetBeansProjects/Lab2Quiz/src/java/binhtt/filters/DispatcherFilter.java</file>
-            <file>file:/C:/Users/binht/OneDrive/Documents/NetBeansProjects/Lab2Quiz/src/java/binhtt/controllers/SubmitController.java</file>
-            <file>file:/C:/Users/binht/OneDrive/Documents/NetBeansProjects/Lab2Quiz/src/java/binhtt/filters/Utf8Filter.java</file>
-            <file>file:/C:/Users/binht/OneDrive/Documents/NetBeansProjects/Lab2Quiz/src/java/binhtt/dtos/AnswerDTO.java</file>
-            <file>file:/C:/Users/binht/OneDrive/Documents/NetBeansProjects/Lab2Quiz/src/java/binhtt/daos/SubjectDAO.java</file>
-            <file>file:/C:/Users/binht/OneDrive/Documents/NetBeansProjects/Lab2Quiz/src/java/binhtt/controllers/LoadQuestionController.java</file>
-            <file>file:/C:/Users/binht/OneDrive/Documents/NetBeansProjects/Lab2Quiz/src/java/binhtt/controllers/UpdateQuestionController.java</file>
             <file>file:/C:/Users/binht/OneDrive/Documents/NetBeansProjects/Lab2Quiz/src/java/binhtt/daos/QuizDAO.java</file>
             <file>file:/C:/Users/binht/OneDrive/Documents/NetBeansProjects/Lab2Quiz/src/java/binhtt/daos/QuestionDAO.java</file>
-            <file>file:/C:/Users/binht/OneDrive/Documents/NetBeansProjects/Lab2Quiz/src/java/binhtt/daos/UserDAO.java</file>
-            <file>file:/C:/Users/binht/OneDrive/Documents/NetBeansProjects/Lab2Quiz/src/java/binhtt/controllers/LogoutController.java</file>
-            <file>file:/C:/Users/binht/OneDrive/Documents/NetBeansProjects/Lab2Quiz/src/java/binhtt/db/MyConnection.java</file>
-            <file>file:/C:/Users/binht/OneDrive/Documents/NetBeansProjects/Lab2Quiz/src/java/binhtt/controllers/LoadQuizController.java</file>
-            <file>file:/C:/Users/binht/OneDrive/Documents/NetBeansProjects/Lab2Quiz/src/java/binhtt/controllers/RegisterController.java</file>
+            <file>file:/C:/Users/binht/OneDrive/Documents/NetBeansProjects/Lab2Quiz/src/java/binhtt/controllers/LoadQuestionController.java</file>
         </group>
     </open-files>
 </project-private>

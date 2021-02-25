@@ -5,6 +5,7 @@
  */
 package binhtt.controllers;
 
+import binhtt.constants.Controllers;
 import binhtt.constants.Pages;
 import binhtt.constants.Roles;
 import binhtt.daos.QuestionDAO;
@@ -62,7 +63,7 @@ public class LoadQuizController extends HttpServlet {
                     String quizId = userDTO.getEmail() + "-" + id + "-" + new Date().getTime();
                     boolean check = quizDAO.createQuiz(quizId, userDTO.getEmail(), Integer.parseInt(time), id, questionDTOS);
                     if(check){
-                        url = Pages.QUIZ_PAGE;
+                        url = Controllers.LOAD_ANSWER_PAGE_CONTROLLER;
                         session.setAttribute("LIST_QUESTION", questionDTOS);
                         session.setAttribute("QUIZ_ID", quizId);
                         List<SubjectDTO> subjectDTOS = (List<SubjectDTO>) getServletContext().getAttribute("SUBJECTS");

@@ -10,6 +10,15 @@ public class QuizDTO implements Serializable {
     private Timestamp start;
     private Timestamp end;
     private int point;
+    private boolean isSubmit;
+
+    public boolean isSubmit() {
+        return isSubmit;
+    }
+
+    public void setSubmit(boolean submit) {
+        isSubmit = submit;
+    }
 
     public String getId() {
         return id;
@@ -66,5 +75,15 @@ public class QuizDTO implements Serializable {
         this.start = start;
         this.end = end;
         this.point = point;
+    }
+
+    public QuizDTO(String id, String userId, String subjectId, Timestamp start, Timestamp end, int point, boolean isSubmit) {
+        this.id = id;
+        this.userId = userId;
+        this.subjectId = subjectId;
+        this.start = start;
+        this.end = end;
+        this.point = point;
+        this.isSubmit = isSubmit;
     }
 }

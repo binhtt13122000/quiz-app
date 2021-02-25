@@ -5,34 +5,26 @@
  */
 package binhtt.controllers;
 
-import binhtt.constants.Controllers;
 import binhtt.constants.Pages;
-import binhtt.constants.Roles;
-import binhtt.daos.QuizDAO;
 import binhtt.dtos.QuestionDTO;
-import binhtt.dtos.SubjectDTO;
+import org.apache.log4j.Logger;
 
 import java.io.IOException;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
-import binhtt.dtos.UserDTO;
-import org.apache.log4j.Logger;
 
 /**
  *
  * @author binht
  */
-@WebServlet(name = "SubmitController", urlPatterns = {"/SubmitController"})
-public class SubmitController extends HttpServlet {
-
-    static final Logger LOGGER = Logger.getLogger(SubmitController.class);
-
+@WebServlet(name = "LoadAnswerPageController", urlPatterns = {"/LoadAnswerPageController"})
+public class LoadAnswerPageController extends HttpServlet {
+    static final Logger LOGGER = Logger.getLogger(LoadAnswerPageController.class);
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -48,30 +40,29 @@ public class SubmitController extends HttpServlet {
         String url = Pages.ERROR_PAGE;
         try {
             HttpSession session = request.getSession();
-            UserDTO userDTO = (UserDTO) session.getAttribute("USER");
-            if(userDTO.getRole() == Roles.ADMIN){
-                request.setAttribute("ERROR", "Admin cannot submit");
+            List<QuestionDTO> questionDTOS = (List<QuestionDTO>) session.getAttribute("LIST_QUESTION");
+            String quizId = (String) session.getAttribute("QUIZ_ID");
+            if(quizId == null){
+                request.setAttribute("ERROR", "Take quiz before select question!");
             } else {
-                String quizId = (String) session.getAttribute("QUIZ_ID");
-                SubjectDTO subjectDTO = (SubjectDTO) session.getAttribute("SELECTED_SUBJECT");
-                List<QuestionDTO> questionDTOS = (List<QuestionDTO>) session.getAttribute("LIST_QUESTION");
-                QuizDAO quizDAO = new QuizDAO();
-                boolean check = quizDAO.submit(quizId, questionDTOS);
-                if (check) {
-                    session.removeAttribute("QUIZ_ID");
-                    session.removeAttribute("LIST_QUESTION");
-                    session.removeAttribute("SELECTED_SUBJECT");
-                    url = Controllers.LOAD_HISTORY_CONTROLLER + "?id=" + subjectDTO.getId();
-                } else {
-                    request.setAttribute("ERROR", "failed!");
+                String questionIndex = request.getParameter("question");
+                String answerId = request.getParameter("answerId");
+                if(questionIndex == null){
+                    questionIndex = "1";
                 }
+                if(answerId != null && !"".equals(answerId.trim())){
+                    questionDTOS.get(Integer.parseInt(questionIndex) - 1).setSelectedAnswer(answerId);
+                    session.setAttribute("LIST_QUESTION", questionDTOS);
+                }
+                request.setAttribute("CURRENT_QUESTION", questionDTOS.get(Integer.parseInt(questionIndex) - 1));
+                request.setAttribute("INDEX", questionIndex);
+                url = Pages.QUIZ_PAGE;
             }
-        } catch (Exception e) {
+        } catch (Exception e){
             e.printStackTrace();
-            request.setAttribute("ERROR", e.getMessage());
-            LOGGER.info("Exception at SubmitController: " + e.getMessage());
+            LOGGER.info("Exception at LoadAnswerPageController: " + e.getMessage());
         } finally {
-            request.getRequestDispatcher(url).forward(request, response);
+             request.getRequestDispatcher(url).forward(request, response);
         }
     }
 

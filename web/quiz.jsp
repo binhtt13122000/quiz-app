@@ -65,13 +65,13 @@
             </div>
             <div class="mt-2 card-body">
                 <div>
-                    <strong>Time: </strong><span id="timeLabel">0:00</span><span>/${sessionScope.SELECTED_SUBJECT.timeToTakeQuiz}:00</span>
-                </div>
-                <div>
-                    <strong>Answered: </strong> 0/${sessionScope.LIST_QUESTION.size()}
+                    <strong>Time: </strong><span
+                        id="timeLabel">0:00</span><span>/${sessionScope.SELECTED_SUBJECT.timeToTakeQuiz}:00</span>
                 </div>
                 <div class="mt-3">
-                    <button class="btn btn-block" style="color: white; background-color: #2dcc70" onclick="submit()">Submit</button>
+                    <button class="btn btn-block" style="color: white; background-color: #2dcc70" onclick="submit()">
+                        Submit
+                    </button>
                 </div>
             </div>
         </div>
@@ -81,13 +81,22 @@
             </div>
             <div class="mt-2">
                 <div class="row no-gutters">
-                    <c:forEach items="${sessionScope.LIST_QUESTION}" varStatus="counter">
-                        <div class="col-3">
-                            <div class="card mx-auto mb-2" style="width: 80%">
-                                <div class="card-header">
+                    <c:forEach items="${sessionScope.LIST_QUESTION}" var="item" varStatus="counter">
+                        <div class="col-3" onclick="goToAnotherQuestion(${counter.count})">
+                            <c:if test="${item.selectedAnswer != null}" var="check">
+                                <div class="card mx-auto mb-2" style="width: 80%">
+                                    <div class="card-header bg-success">
+                                    </div>
+                                    <div class="mx-auto">${counter.count}</div>
                                 </div>
-                                <div class="mx-auto">${counter.count}</div>
-                            </div>
+                            </c:if>
+                            <c:if test="${!check}">
+                                <div class="card mx-auto mb-2" style="width: 80%">
+                                    <div class="card-header">
+                                    </div>
+                                    <div class="mx-auto">${counter.count}</div>
+                                </div>
+                            </c:if>
                         </div>
                     </c:forEach>
                 </div>
@@ -95,27 +104,40 @@
         </div>
     </div>
     <div class="col-12 col-md-9">
-        <h1 class="text-center" style="color:#2dcc70;">${sessionScope.SELECTED_SUBJECT.id} - ${sessionScope.SELECTED_SUBJECT.name}</h1>
-        <c:forEach items="${sessionScope.LIST_QUESTION}" var="question" varStatus="count">
-            <div class="card mt-3">
-                <div class="card-header">
-                    <div>
-                            ${count.count}, ${question.question}
-                    </div>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <c:forEach items="${question.answerOfQuestionDTOS}" var="answer" varStatus="counter">
-                            <c:if test="${!answer.id.endsWith('_0')}">
-                                <div class="col-12 mb-2">
-                                    <div id='answer-${answer.id}' onclick="choose('answer-${answer.id}', 'answer-${question.id}', ${count.count}, '${answer.id}')" class="answer-${question.id} card" style="cursor: pointer; border-radius: 10px">${counter.count - 1}. ${answer.content}</div>
-                                </div>
-                            </c:if>
-                        </c:forEach>
-                    </div>
+        <h1 class="text-center" style="color:#2dcc70;">${sessionScope.SELECTED_SUBJECT.id}
+            - ${sessionScope.SELECTED_SUBJECT.name}</h1>
+        <div class="card mt-3">
+            <div class="card-header">
+                <div>
+                    ${requestScope.CURRENT_QUESTION.question}
                 </div>
             </div>
-        </c:forEach>
+            <div class="card-body">
+                <div class="row">
+                    <c:forEach items="${requestScope.CURRENT_QUESTION.answerOfQuestionDTOS}" var="answer"
+                               varStatus="counter">
+                        <c:if test="${!answer.id.endsWith('_0')}">
+                            <c:if test="${requestScope.CURRENT_QUESTION.selectedAnswer.equals(answer.id)}"
+                                  var="isSelectedAnswer">
+                                <div class="col-12 mb-2">
+                                    <div
+                                         class="card bg-info text-white"
+                                         style="cursor: pointer; border-radius: 10px">${counter.count - 1}. ${answer.content}</div>
+                                </div>
+                            </c:if>
+                            <c:if test="${!isSelectedAnswer}">
+                                <div class="col-12 mb-2">
+                                    <div
+                                         onclick="chooseAnAnswer(${requestScope.INDEX}, '${answer.id}')"
+                                         class="card"
+                                         style="cursor: pointer; border-radius: 10px">${counter.count - 1}. ${answer.content}</div>
+                                </div>
+                            </c:if>
+                        </c:if>
+                    </c:forEach>
+                </div>
+            </div>
+        </div>
     </div>
 </main>
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
@@ -125,54 +147,47 @@
         integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns"
         crossorigin="anonymous"></script>
 <script>
-    function choose(id, className, index, answer){
-        let elements = document.getElementsByClassName(className);
-        Array.prototype.map.call(elements, function (el){
-            el.classList.remove('bg-info');
-            el.classList.remove('text-white');
-            return true;
-        })
-        document.getElementById(id).classList.add('bg-info');
-        document.getElementById(id).classList.add('text-white');
-        let answerIndex = answer.split("_")[answer.split("_").length - 1];
-        sessionStorage.setItem('${quizId}-' + index, answerIndex);
+    function submit() {
+        localStorage.clear()
+        location.href = 'submit';
     }
 
-    function submit(){
-        let str = '';
-        for(let i = 0; i < ${sessionScope.LIST_QUESTION.size()}; i++){
-            let answer = sessionStorage.getItem('${quizId}-' + (i + 1));
-            if(answer === null){
-                answer = '0'
-            }
-            str = str.concat(answer)
+    let time = 0;
+    let minute;
+    let second;
+    function loadTime() {
+        let saveTime = localStorage.getItem("time");
+        if (saveTime === null || saveTime === undefined) {
+            saveTime =
+            ${sessionScope.SELECTED_SUBJECT.timeToTakeQuiz * 60}
         }
-        sessionStorage.clear();
-        location.href = 'submit?answer=' + str;
-    }
-
-    window.addEventListener('beforeunload', function (e) {
-        e.preventDefault();
-        e.returnValue = '';
-    });
-
-    function loadTime(){
-        let time = ${requestScope.SELECTED_SUBJECT.timeToTakeQuiz * 60};
-        let minute = 0;
-        let second = 0;
-        let interval = setInterval(function() {
+        time = saveTime;
+        let displayTime = ${sessionScope.SELECTED_SUBJECT.timeToTakeQuiz * 60} -time;
+        minute = Math.floor(displayTime / 60);
+        second = displayTime - 60 * Math.floor(displayTime / 60);
+        let interval = setInterval(function () {
             time--;
             second = second + 1;
-            if (second == 60) {
+            if (second === 60) {
                 minute = minute + 1;
                 second = 0;
             }
             document.getElementById('timeLabel').innerHTML = "" + minute + ":" + second;
-            if (time == 0) {
+            if (time === 0) {
                 clearInterval(interval);
                 submit();
             }
         }, 1000)
+    }
+
+    function chooseAnAnswer(questionIndex, answerId){
+        localStorage.setItem("time", time);
+        location.href='loadAnswerPage?question=' + questionIndex + '&answerId=' + answerId;
+    }
+
+    function goToAnotherQuestion(questionIndex) {
+        localStorage.setItem("time", time);
+        location.href = 'loadAnswerPage?question=' + questionIndex;
     }
 </script>
 </body>

@@ -9,6 +9,7 @@ public class QuestionDTO implements Serializable {
     private boolean status;
     private String subId;
     private List<AnswerOfQuestionDTO> answerOfQuestionDTOS;
+    private String selectedAnswer;
 
     public QuestionDTO(String id, String question, boolean status, String subId, List<AnswerOfQuestionDTO> answerOfQuestionDTOS) {
         this.id = id;
@@ -56,5 +57,13 @@ public class QuestionDTO implements Serializable {
 
     public void setAnswerOfQuestionDTOS(List<AnswerOfQuestionDTO> answerOfQuestionDTOS) {
         this.answerOfQuestionDTOS = answerOfQuestionDTOS;
+    }
+
+    public String getSelectedAnswer() {
+        return selectedAnswer;
+    }
+
+    public void setSelectedAnswer(String selectedAnswer) {
+        this.selectedAnswer = selectedAnswer;
     }
 }

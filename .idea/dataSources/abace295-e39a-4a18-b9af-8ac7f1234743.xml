@@ -44,7 +44,6 @@
     </database>
     <database id="3" parent="1" name="Book_Store">
       <ObjectId>8</ObjectId>
-      <Collation>SQL_Latin1_General_CP1_CI_AS</Collation>
     </database>
     <database id="4" parent="1" name="CONTACT">
       <ObjectId>9</ObjectId>
@@ -266,7 +265,7 @@
     </schema>
     <schema id="49" parent="8" name="dbo">
       <ObjectId>1</ObjectId>
-      <IntrospectionTimestamp>2021-02-23.13:50:46.170</IntrospectionTimestamp>
+      <IntrospectionTimestamp>2021-02-26.08:41:10.210</IntrospectionTimestamp>
       <Current>1</Current>
     </schema>
     <schema id="50" parent="8" name="guest">
@@ -366,7 +365,7 @@
     <table id="68" parent="49" name="TblQuiz">
       <ObjectId>885578193</ObjectId>
       <CreatedTimestamp>2021-02-23.13:49:58.410</CreatedTimestamp>
-      <ModifiedTimestamp>2021-02-23.13:49:58.413</ModifiedTimestamp>
+      <ModifiedTimestamp>2021-02-26.08:40:52.940</ModifiedTimestamp>
     </table>
     <table id="69" parent="49" name="TblRole">
       <ObjectId>581577110</ObjectId>
@@ -540,14 +539,18 @@
       <Position>6</Position>
       <DataType>int|0s</DataType>
     </column>
-    <index id="97" parent="68" name="PK__TblQuiz__3213E83F391F5C70">
+    <column id="97" parent="68" name="isSubmit">
+      <Position>7</Position>
+      <DataType>bit|0s</DataType>
+    </column>
+    <index id="98" parent="68" name="PK__TblQuiz__3213E83F391F5C70">
       <Position>1</Position>
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
       <Clustering>1</Clustering>
       <Unique>1</Unique>
     </index>
-    <key id="98" parent="68" name="PK__TblQuiz__3213E83F391F5C70">
+    <key id="99" parent="68" name="PK__TblQuiz__3213E83F391F5C70">
       <ObjectId>901578250</ObjectId>
       <NameSurrogate>1</NameSurrogate>
       <CreatedTimestamp>2021-02-23.13:49:58.410</CreatedTimestamp>
@@ -556,7 +559,7 @@
       <UnderlyingIndexName>PK__TblQuiz__3213E83F391F5C70</UnderlyingIndexName>
       <Primary>1</Primary>
     </key>
-    <foreign-key id="99" parent="68" name="FK__TblQuiz__userId__36B12243">
+    <foreign-key id="100" parent="68" name="FK__TblQuiz__userId__36B12243">
       <ObjectId>917578307</ObjectId>
       <NameSurrogate>1</NameSurrogate>
       <CreatedTimestamp>2021-02-23.13:49:58.410</CreatedTimestamp>
@@ -567,7 +570,7 @@
       <RefKeyName>PK__TblUser__AB6E6165A4F94EC6</RefKeyName>
       <RefColNames>email</RefColNames>
     </foreign-key>
-    <foreign-key id="100" parent="68" name="FK__TblQuiz__subject__37A5467C">
+    <foreign-key id="101" parent="68" name="FK__TblQuiz__subject__37A5467C">
       <ObjectId>933578364</ObjectId>
       <NameSurrogate>1</NameSurrogate>
       <CreatedTimestamp>2021-02-23.13:49:58.410</CreatedTimestamp>
@@ -578,7 +581,7 @@
       <RefKeyName>PK__TblSubje__3213E83F697380F0</RefKeyName>
       <RefColNames>id</RefColNames>
     </foreign-key>
-    <check id="101" parent="68" name="CK__TblQuiz__point__38996AB5">
+    <check id="102" parent="68" name="CK__TblQuiz__point__38996AB5">
       <ObjectId>949578421</ObjectId>
       <NameSurrogate>1</NameSurrogate>
       <CreatedTimestamp>2021-02-23.13:49:58.410</CreatedTimestamp>
@@ -586,24 +589,24 @@
       <ColNames>point</ColNames>
       <Predicate>[point]&gt;=0 AND [point]&lt;=100</Predicate>
     </check>
-    <column id="102" parent="69" name="id">
+    <column id="103" parent="69" name="id">
       <Position>1</Position>
       <DataType>int|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="103" parent="69" name="roleName">
+    <column id="104" parent="69" name="roleName">
       <Position>2</Position>
       <DataType>varchar(20 char)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <index id="104" parent="69" name="PK__TblRole__3213E83FB5A50085">
+    <index id="105" parent="69" name="PK__TblRole__3213E83FB5A50085">
       <Position>1</Position>
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
       <Clustering>1</Clustering>
       <Unique>1</Unique>
     </index>
-    <key id="105" parent="69" name="PK__TblRole__3213E83FB5A50085">
+    <key id="106" parent="69" name="PK__TblRole__3213E83FB5A50085">
       <ObjectId>597577167</ObjectId>
       <NameSurrogate>1</NameSurrogate>
       <CreatedTimestamp>2021-02-23.13:49:58.283</CreatedTimestamp>
@@ -612,45 +615,45 @@
       <UnderlyingIndexName>PK__TblRole__3213E83FB5A50085</UnderlyingIndexName>
       <Primary>1</Primary>
     </key>
-    <column id="106" parent="70" name="id">
+    <column id="107" parent="70" name="id">
       <Position>1</Position>
       <DataType>varchar(50 char)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="107" parent="70" name="name">
+    <column id="108" parent="70" name="name">
       <Position>2</Position>
       <DataType>nvarchar(max)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="108" parent="70" name="timeToTakeQuiz">
+    <column id="109" parent="70" name="timeToTakeQuiz">
       <Position>3</Position>
       <DataType>int|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="109" parent="70" name="totalOfQuestionsPerQuiz">
+    <column id="110" parent="70" name="totalOfQuestionsPerQuiz">
       <Position>4</Position>
       <DataType>int|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="110" parent="70" name="pointPerQuestion">
+    <column id="111" parent="70" name="pointPerQuestion">
       <Position>5</Position>
       <DataType>float|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="111" parent="70" name="status">
+    <column id="112" parent="70" name="status">
       <Position>6</Position>
       <DefaultConstraintName>DF__TblSubjec__statu__2C3393D0</DefaultConstraintName>
       <DefaultExpression>1</DefaultExpression>
       <DataType>bit|0s</DataType>
     </column>
-    <index id="112" parent="70" name="PK__TblSubje__3213E83F697380F0">
+    <index id="113" parent="70" name="PK__TblSubje__3213E83F697380F0">
       <Position>1</Position>
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
       <Clustering>1</Clustering>
       <Unique>1</Unique>
     </index>
-    <key id="113" parent="70" name="PK__TblSubje__3213E83F697380F0">
+    <key id="114" parent="70" name="PK__TblSubje__3213E83F697380F0">
       <ObjectId>693577509</ObjectId>
       <NameSurrogate>1</NameSurrogate>
       <CreatedTimestamp>2021-02-23.13:49:58.407</CreatedTimestamp>
@@ -659,7 +662,7 @@
       <UnderlyingIndexName>PK__TblSubje__3213E83F697380F0</UnderlyingIndexName>
       <Primary>1</Primary>
     </key>
-    <check id="114" parent="70" name="CK__TblSubjec__timeT__2A4B4B5E">
+    <check id="115" parent="70" name="CK__TblSubjec__timeT__2A4B4B5E">
       <ObjectId>709577566</ObjectId>
       <NameSurrogate>1</NameSurrogate>
       <CreatedTimestamp>2021-02-23.13:49:58.407</CreatedTimestamp>
@@ -667,7 +670,7 @@
       <ColNames>timeToTakeQuiz</ColNames>
       <Predicate>[timeToTakeQuiz]&gt;15</Predicate>
     </check>
-    <check id="115" parent="70" name="CK__TblSubjec__total__2B3F6F97">
+    <check id="116" parent="70" name="CK__TblSubjec__total__2B3F6F97">
       <ObjectId>725577623</ObjectId>
       <NameSurrogate>1</NameSurrogate>
       <CreatedTimestamp>2021-02-23.13:49:58.407</CreatedTimestamp>
@@ -675,46 +678,46 @@
       <ColNames>totalOfQuestionsPerQuiz</ColNames>
       <Predicate>[totalOfQuestionsPerQuiz]&gt;5</Predicate>
     </check>
-    <default id="116" parent="70" name="DF__TblSubjec__statu__2C3393D0">
+    <default id="117" parent="70" name="DF__TblSubjec__statu__2C3393D0">
       <ObjectId>741577680</ObjectId>
       <NameSurrogate>1</NameSurrogate>
       <ModifiedTimestamp>2021-02-23.13:49:58.407</ModifiedTimestamp>
       <ColNames>status</ColNames>
       <DefaultExpression>1</DefaultExpression>
     </default>
-    <column id="117" parent="71" name="email">
+    <column id="118" parent="71" name="email">
       <Position>1</Position>
       <DataType>varchar(50 char)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="118" parent="71" name="name">
+    <column id="119" parent="71" name="name">
       <Position>2</Position>
       <DataType>nvarchar(max)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="119" parent="71" name="password">
+    <column id="120" parent="71" name="password">
       <Position>3</Position>
       <DataType>nvarchar(max)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="120" parent="71" name="status">
+    <column id="121" parent="71" name="status">
       <Position>4</Position>
       <DefaultConstraintName>DF__TblUser__status__267ABA7A</DefaultConstraintName>
       <DefaultExpression>1</DefaultExpression>
       <DataType>bit|0s</DataType>
     </column>
-    <column id="121" parent="71" name="roleId">
+    <column id="122" parent="71" name="roleId">
       <Position>5</Position>
       <DataType>int|0s</DataType>
     </column>
-    <index id="122" parent="71" name="PK__TblUser__AB6E6165A4F94EC6">
+    <index id="123" parent="71" name="PK__TblUser__AB6E6165A4F94EC6">
       <Position>1</Position>
       <NameSurrogate>1</NameSurrogate>
       <ColNames>email</ColNames>
       <Clustering>1</Clustering>
       <Unique>1</Unique>
     </index>
-    <key id="123" parent="71" name="PK__TblUser__AB6E6165A4F94EC6">
+    <key id="124" parent="71" name="PK__TblUser__AB6E6165A4F94EC6">
       <ObjectId>629577281</ObjectId>
       <NameSurrogate>1</NameSurrogate>
       <CreatedTimestamp>2021-02-23.13:49:58.367</CreatedTimestamp>
@@ -723,7 +726,7 @@
       <UnderlyingIndexName>PK__TblUser__AB6E6165A4F94EC6</UnderlyingIndexName>
       <Primary>1</Primary>
     </key>
-    <foreign-key id="124" parent="71" name="FK__TblUser__roleId__276EDEB3">
+    <foreign-key id="125" parent="71" name="FK__TblUser__roleId__276EDEB3">
       <ObjectId>661577395</ObjectId>
       <NameSurrogate>1</NameSurrogate>
       <CreatedTimestamp>2021-02-23.13:49:58.380</CreatedTimestamp>
@@ -734,41 +737,41 @@
       <RefKeyName>PK__TblRole__3213E83FB5A50085</RefKeyName>
       <RefColNames>id</RefColNames>
     </foreign-key>
-    <default id="125" parent="71" name="DF__TblUser__status__267ABA7A">
+    <default id="126" parent="71" name="DF__TblUser__status__267ABA7A">
       <ObjectId>645577338</ObjectId>
       <NameSurrogate>1</NameSurrogate>
       <ModifiedTimestamp>2021-02-23.13:49:58.370</ModifiedTimestamp>
       <ColNames>status</ColNames>
       <DefaultExpression>1</DefaultExpression>
     </default>
-    <column id="126" parent="72" name="id">
+    <column id="127" parent="72" name="id">
       <Position>1</Position>
       <DataType>varchar(50 char)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="127" parent="72" name="answer_content">
+    <column id="128" parent="72" name="answer_content">
       <Position>2</Position>
       <DataType>nvarchar(max)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="128" parent="72" name="isCorrect">
+    <column id="129" parent="72" name="isCorrect">
       <Position>3</Position>
       <DefaultConstraintName>DF__tblAnswer__isCor__32E0915F</DefaultConstraintName>
       <DefaultExpression>0</DefaultExpression>
       <DataType>bit|0s</DataType>
     </column>
-    <column id="129" parent="72" name="questionId">
+    <column id="130" parent="72" name="questionId">
       <Position>4</Position>
       <DataType>varchar(50 char)|0s</DataType>
     </column>
-    <index id="130" parent="72" name="PK__tblAnswe__3213E83F836B3DEC">
+    <index id="131" parent="72" name="PK__tblAnswe__3213E83F836B3DEC">
       <Position>1</Position>
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
       <Clustering>1</Clustering>
       <Unique>1</Unique>
     </index>
-    <key id="131" parent="72" name="PK__tblAnswe__3213E83F836B3DEC">
+    <key id="132" parent="72" name="PK__tblAnswe__3213E83F836B3DEC">
       <ObjectId>837578022</ObjectId>
       <NameSurrogate>1</NameSurrogate>
       <CreatedTimestamp>2021-02-23.13:49:58.407</CreatedTimestamp>
@@ -777,7 +780,7 @@
       <UnderlyingIndexName>PK__tblAnswe__3213E83F836B3DEC</UnderlyingIndexName>
       <Primary>1</Primary>
     </key>
-    <foreign-key id="132" parent="72" name="FK__tblAnswer__quest__33D4B598">
+    <foreign-key id="133" parent="72" name="FK__tblAnswer__quest__33D4B598">
       <ObjectId>869578136</ObjectId>
       <NameSurrogate>1</NameSurrogate>
       <CreatedTimestamp>2021-02-23.13:49:58.407</CreatedTimestamp>
@@ -788,7 +791,7 @@
       <RefKeyName>PK__TblQuest__3213E83FCA44FAB3</RefKeyName>
       <RefColNames>id</RefColNames>
     </foreign-key>
-    <default id="133" parent="72" name="DF__tblAnswer__isCor__32E0915F">
+    <default id="134" parent="72" name="DF__tblAnswer__isCor__32E0915F">
       <ObjectId>853578079</ObjectId>
       <NameSurrogate>1</NameSurrogate>
       <ModifiedTimestamp>2021-02-23.13:49:58.407</ModifiedTimestamp>

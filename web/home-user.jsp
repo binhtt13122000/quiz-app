@@ -68,32 +68,34 @@
                     <tr>
                         <th scope="col">State</th>
                         <th scope="col">Grade/100.00</th>
-                        <th scope="col">Review</th>
                     </tr>
                     </thead>
                     <tbody>
                     <c:forEach items="${requestScope.HISTORY}" var="quiz">
                         <tr>
                             <td>
-                                <c:if test="${quiz.point < 5}" var="isReject">
+                                <c:if test="${!quiz.submit}" var="notSubmit">
                                     <h5>Reject!</h5>
                                     <p>
                                         Not submitted!
                                     </p>
                                 </c:if>
-                                <c:if test="${!isReject}">
-                                    <h5>Finished!</h5>
-                                    <p>
-                                        Submitted ${quiz.end}
-                                    </p>
+                                <c:if test="${!notSubmit}">
+                                    <c:if test="${quiz.point < 5}" var="notPass">
+                                        <h5>Reject!</h5>
+                                        <p>
+                                            Not passed!
+                                        </p>
+                                    </c:if>
+                                    <c:if test="${!notPass}">
+                                        <h5>Success!</h5>
+                                        <p>
+                                            Passed!
+                                        </p>
+                                    </c:if>
                                 </c:if>
                             </td>
                             <td>${quiz.point}</td>
-                            <td>
-                                <c:if test="${!isReject}">
-                                    <a href="#">Review</a>
-                                </c:if>
-                            </td>
                         </tr>
                     </c:forEach>
                     </tbody>
