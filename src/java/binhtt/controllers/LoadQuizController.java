@@ -79,7 +79,6 @@ public class LoadQuizController extends HttpServlet {
                 }
             }
         } catch (Exception e){
-            e.printStackTrace();
             request.setAttribute("ERROR", e.getMessage());
             LOGGER.info("Exception at LoadQuizController: " + e.getMessage());
         }  finally {

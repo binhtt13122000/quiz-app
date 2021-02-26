@@ -71,7 +71,6 @@ public class CreateQuestionController extends HttpServlet {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
             request.setAttribute("ERROR", e.getMessage());
             LOGGER.info("Exception at CreateQuizController: " + e.getMessage());
         } finally {

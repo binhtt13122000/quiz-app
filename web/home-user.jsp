@@ -124,7 +124,6 @@
 <script>
         $('#linkShowTable').click(function (){
             let className = $('#reviewTable').attr('class');
-            console.log(className)
             if(className === 'd-none'){
                 $('#reviewTable').removeClass('d-none')
             } else {

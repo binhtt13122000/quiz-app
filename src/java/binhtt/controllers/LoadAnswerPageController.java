@@ -59,7 +59,6 @@ public class LoadAnswerPageController extends HttpServlet {
                 url = Pages.QUIZ_PAGE;
             }
         } catch (Exception e){
-            e.printStackTrace();
             LOGGER.info("Exception at LoadAnswerPageController: " + e.getMessage());
         } finally {
              request.getRequestDispatcher(url).forward(request, response);

@@ -10,7 +10,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class QuestionDAO implements Serializable {
@@ -46,7 +45,6 @@ public class QuestionDAO implements Serializable {
             int numOfAnswer = 0;
             for (AnswerOfQuestionDTO answer: questionDTO.getAnswerOfQuestionDTOS()) {
                 preparedStatement = connection.prepareStatement(sqlAnswer);
-                System.out.println(answer.getId());
                 preparedStatement.setString(1, answer.getId());
                 preparedStatement.setString(2, answer.getContent());
                 preparedStatement.setBoolean(3, answer.isCorrect());

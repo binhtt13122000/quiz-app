@@ -67,7 +67,6 @@ public class SubmitController extends HttpServlet {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
             request.setAttribute("ERROR", e.getMessage());
             LOGGER.info("Exception at SubmitController: " + e.getMessage());
         } finally {

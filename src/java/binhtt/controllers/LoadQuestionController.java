@@ -69,7 +69,6 @@ public class LoadQuestionController extends HttpServlet {
                 }
                 QuestionDAO questionDAO = new QuestionDAO();
                 List<QuestionDTO> questionDTOS = questionDAO.getQuestions(Integer.parseInt(page), questionContent, status, subjectId);
-                System.out.println("Size: " + questionDTOS.size());
                 int total = questionDAO.getTotalOfQuestions(questionContent, status, subjectId);
                 request.setAttribute("LIST_QUESTION", questionDTOS);
                 int totalPage = total % Constants.PAGE_SIZE == 0 ? total / Constants.PAGE_SIZE : total / Constants.PAGE_SIZE + 1;
